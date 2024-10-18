@@ -1,8 +1,15 @@
+:root {
+    --main-color: #ff7f00;
+    --hover-color: #ff9000;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: var(--background-color);
 }
 
 .header {
@@ -25,13 +32,13 @@ body {
 
 .header .nav a {
     text-decoration: none;
-    color: #333;
+    color: var(--text-color);
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
 .header .nav a:hover {
-    color: #ff7f00;
+    color: var(--main-color);
     /* Đổi màu chữ khi hover */
 }
 
@@ -42,7 +49,7 @@ body {
 }
 
 .header .actions .btn {
-    background-color: #ff7f00;
+    background-color: var(--main-color);
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -52,7 +59,7 @@ body {
 }
 
 .header .actions .btn:hover {
-    background-color: #ff9000;
+    background-color: var(--hover-color);
     transform: scale(1.05);
     /* Phóng to nút khi hover */
 }
@@ -66,7 +73,7 @@ body {
 
 .header .actions .contact i,
 .header .actions .account i {
-    color: #ff7f00;
+    color: var(--main-color);
 }
 
 .banner {
@@ -130,7 +137,7 @@ body {
 }
 
 .sidebar .filter ul li i {
-    color: #333;
+    color: var(--text-color);
 }
 
 .content {
@@ -166,7 +173,7 @@ body {
 
 .content .search-bar button {
     padding: 10px 20px;
-    background-color: #ff7f00;
+    background-color: var(--main-color);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -176,7 +183,7 @@ body {
 }
 
 .content .search-bar button:hover {
-    background-color: #ff9000;
+    background-color: var(--hover-color);
     transform: scale(1.05);
     /* Phóng to nút khi hover */
 }
@@ -250,7 +257,7 @@ body {
 }
 
 .content .listings .listing .details .info i {
-    color: #ff7f00;
+    color: var(--main-color);
 }
 
 .slider-container {
@@ -267,8 +274,6 @@ body {
     font-size: 14px;
     color: #666;
 }
-
-
 
 .logo {
     display: flex;
@@ -302,170 +307,6 @@ body {
     fill: #ffffff;
 }
 
-<<<<<<< HEAD
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-}
-
-form {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-=======
-form {
-    max-width: 600px;
-    margin: 20px auto;
-    /* Căn giữa */
-    padding: 20px;
-    background: #fff;
-    /* Nền trắng cho form */
-    border-radius: 5px;
-    /* Bo tròn các góc */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    /* Đổ bóng cho form */
-}
-
-/* Tiêu đề của form */
-h2 {
-    text-align: center;
-    /* Căn giữa tiêu đề */
-    color: #333;
-    /* Màu chữ tối */
-    margin-bottom: 20px;
-    /* Khoảng cách dưới tiêu đề */
-}
-
-/* Thiết lập cho label */
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
-label {
-    display: block;
-    margin-top: 10px;
-    color: #555;
-<<<<<<< HEAD
-}
-
-=======
-    /* Màu chữ cho label */
-}
-
-/* Thiết lập kiểu cho các input, select và textarea */
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
-input[type="text"],
-input[type="number"],
-select,
-textarea {
-    width: 100%;
-    padding: 10px;
-<<<<<<< HEAD
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: border-color 0.3s;
-}
-
-=======
-    /* Padding cho các trường */
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    /* Đường viền cho các trường */
-    border-radius: 4px;
-    /* Bo tròn các góc */
-    transition: border-color 0.3s;
-    /* Hiệu ứng chuyển màu đường viền */
-}
-
-/* Hiệu ứng khi hover trên các input */
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
-input[type="text"]:focus,
-input[type="number"]:focus,
-select:focus,
-textarea:focus {
-    border-color: #4CAF50;
-<<<<<<< HEAD
-    outline: none;
-}
-
-input[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-}
-
-input[type="submit"]:hover {
-    background-color: #45a049;
-}
-
-textarea {
-    height: 100px;
-    resize: vertical;
-}
-
-
-=======
-    /* Đổi màu viền khi focus */
-    outline: none;
-    /* Xóa outline mặc định */
-}
-
-/* Thiết lập cho input file */
-input[type="file"] {
-    margin-top: 5px;
-}
-
-/* Thiết lập cho nút submit */
-input[type="submit"] {
-    background-color: #4CAF50;
-    /* Màu nền cho nút */
-    color: white;
-    /* Màu chữ cho nút */
-    padding: 10px 15px;
-    /* Padding cho nút */
-    border: none;
-    /* Xóa đường viền */
-    border-radius: 4px;
-    /* Bo tròn các góc */
-    cursor: pointer;
-    /* Con trỏ chuột khi hover */
-    margin-top: 20px;
-    /* Khoảng cách trên nút */
-    transition: background-color 0.3s;
-    /* Hiệu ứng chuyển màu nền */
-}
-
-/* Hiệu ứng khi hover trên nút submit */
-input[type="submit"]:hover {
-    background-color: #45a049;
-    /* Đổi màu nền khi hover */
-}
-
-/* Định dạng cho textarea */
-textarea {
-    height: 100px;
-    /* Chiều cao cố định cho textarea */
-    resize: vertical;
-    /* Cho phép thay đổi kích thước theo chiều dọc */
-}
-
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
 .listing {
     width: calc(50% - 10px);
     background-color: #fff;
@@ -547,7 +388,7 @@ textarea {
 .price i {
     margin-right: 10px;
 }
-<<<<<<< HEAD
+
 .account-dropdown {
     position: relative;
     display: inline-block;
@@ -557,28 +398,22 @@ textarea {
     background: none;
     border: none;
     cursor: pointer;
-    display: flex;
-    align-items: center;
     font-size: 16px;
-    color: #333;
-}
-
-.account-btn i {
-    margin-right: 5px;
+    color: var(--text-color);
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
     right: 0;
-    background-color: #f9f9f9;
+    background-color: var(--background-color);
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 
 .dropdown-content a {
-    color: black;
+    color: var(--text-color);
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -591,5 +426,133 @@ textarea {
 .account-dropdown:hover .dropdown-content {
     display: block;
 }
-=======
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
+
+form {
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+   
+}
+
+input[type="submit"] {
+    background-color: var(--main-color);
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: var(--hover-color);
+}
+
+.footer {
+    background-color: #222; /* Màu nền tối hơn cho phần footer */
+    color: #fff;
+    padding: 40px 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #ff7f00; /* Màu chữ chính */
+}
+
+.footer-section p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer-section.about .contact span {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.footer-section.about .socials a {
+    color: #ff7f00; /* Màu biểu tượng mạng xã hội */
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.footer-section.links ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-section.links ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section.links ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-section.links ul li a:hover {
+    color: #ff7f00; /* Đổi màu khi hover */
+}
+
+.footer-section.contact-form .contact-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #444; /* Màu nền ô nhập liệu tối hơn */
+    color: #ffffff;
+}
+
+.footer-section.contact-form .btn {
+    padding: 10px 15px;
+    background-color: #ff7f00; /* Màu nền nút */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.footer-section.contact-form .btn:hover {
+    background-color: #e66f00; /* Đổi màu khi hover */
+}
+
+.footer-bottom {
+    background-color: #111; /* Màu nền tối hơn cho phần cuối */
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+}
+

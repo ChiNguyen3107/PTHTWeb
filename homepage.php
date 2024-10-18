@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 session_start();
 require_once 'config.php';
 
@@ -25,22 +24,6 @@ if (isset($_SESSION['success'])) {
 ?>
 
 
-=======
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "pthtweb";
-
-// Tạo kết nối
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Kiểm tra kết nối
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
-}
-?>
-
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
 <html>
 
 <head>
@@ -375,7 +358,6 @@ if ($conn->connect_error) {
                 <i class="fas fa-phone-alt">
                 </i>
                 <span>
-<<<<<<< HEAD
                     0835886837
                 </span>
             </div>
@@ -397,17 +379,6 @@ if ($conn->connect_error) {
                         <?php endif; ?>
                     </div>
                 </div>
-=======
-                    0938119439
-                </span>
-            </div>
-            <div class="account">
-                <i class="fas fa-user">
-                </i>
-                <span>
-                    Tài khoản
-                </span>
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
             </div>
         </div>
     </div>
@@ -615,7 +586,6 @@ if ($conn->connect_error) {
             </div>
             <div class="listings">
                 <?php
-<<<<<<< HEAD
                 // Truy vấn để lấy thông tin xe, hãng xe, dòng xe và ảnh
                 $sql = "SELECT xe.*, hang_xe.ten_hang_xe as hang_xe, dong_xe.ten_dong_xe as dong_xe, GROUP_CONCAT(anh_xe.url_anh) as all_images
             FROM xe
@@ -645,35 +615,11 @@ if ($conn->connect_error) {
                         echo '</div>';
 
                         // Hiển thị thông tin xe
-=======
-                $sql = "SELECT xe.*, GROUP_CONCAT(anh_xe.url_anh) as all_images 
-            FROM xe 
-            LEFT JOIN anh_xe ON xe.id = anh_xe.xe_id 
-            GROUP BY xe.id 
-            LIMIT 10";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $images = explode(',', $row["all_images"]);
-                        echo '<div class="listing">';
-                        echo '<div class="image-container">';
-                        foreach ($images as $index => $image) {
-                            echo '<img src="' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' . ($index == 0 ? 'class="active"' : '') . '/>';
-                        }
-                        echo '<button class="prev-btn">&#10094;</button>';
-                        echo '<button class="next-btn">&#10095;</button>';
-                        echo '</div>';
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
                         echo '<div class="details">';
                         echo '<h3>' . $row["hang_xe"] . ' ' . $row["dong_xe"] . ' ' . $row["phien_ban"] . '</h3>';
                         echo '<div class="info-grid">';
                         echo '<div class="info-item"><i class="fas fa-calendar-alt"></i> ' . $row["nam_san_xuat"] . '</div>';
-<<<<<<< HEAD
                         echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["odo"]) . ' km</div>';
-=======
-                        echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["so_km"]) . ' km</div>';
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
                         echo '<div class="info-item"><i class="fas fa-gas-pump"></i> ' . $row["nhien_lieu"] . '</div>';
                         echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
                         echo '</div>';
@@ -686,7 +632,6 @@ if ($conn->connect_error) {
                 }
                 ?>
             </div>
-<<<<<<< HEAD
 
 
         </div>
@@ -746,10 +691,6 @@ if ($conn->connect_error) {
         ?>
     </div> -->
 
-=======
-        </div>
-    </div>
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
     <script>
         function setupImageSlider() {
             const listings = document.querySelectorAll('.listing');
@@ -786,11 +727,51 @@ if ($conn->connect_error) {
 
         setupImageSlider();
     </script>
-<<<<<<< HEAD
     <script src="script.js"></script>
-=======
->>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
 </body>
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section about">
+            <h3>Về CaR88</h3>
+            <p>CaR88 là nền tảng mua bán xe hơi trực tuyến hàng đầu tại Việt Nam. Chúng tôi cung cấp dịch vụ đáng tin
+                cậy và thuận tiện cho người mua và bán xe.</p>
+            <div class="contact">
+                <span><i class="fas fa-phone"></i> &nbsp; 0835886837</span>
+                <span><i class="fas fa-envelope"></i> &nbsp; info@car88.com</span>
+            </div>
+            <div class="socials">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-section links">
+            <h3>Liên kết nhanh</h3>
+            <ul>
+                <li><a href="#">Trang chủ</a></li>
+                <li><a href="#">Mua xe</a></li>
+                <li><a href="#">Bán xe</a></li>
+                <li><a href="#">Tin tức</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+        <div class="footer-section contact-form">
+            <h3>Liên hệ với chúng tôi</h3>
+            <form action="#" method="post">
+                <input type="email" name="email" class="text-input contact-input" placeholder="Email của bạn...">
+                <textarea name="message" class="text-input contact-input" placeholder="Tin nhắn của bạn..."></textarea>
+                <button type="submit" class="btn btn-big contact-btn">
+                    <i class="fas fa-envelope"></i>
+                    Gửi
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2023 CaR88.com | Thiết kế bởi Nhóm 9
+    </div>
+</footer>
 
 </html>
 

@@ -53,6 +53,102 @@ $roles = $conn->query("SELECT * FROM roles WHERE role_name != 'admin'")->fetch_a
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký tài khoản</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: #dc0e0e;
+            /* Màu đỏ cho thông báo lỗi */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="password"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+
+        }
+
+        input[type="email"]:focus,
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        input[type="password"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4CAF50;
+            /* Màu xanh lá cây khi focus */
+            outline: none;
+        }
+
+        button {
+            background-color: #ff7f00;
+            /* Màu nền cho nút */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            /* Chiều rộng nút chiếm toàn bộ */
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff9000;
+            /* Màu nền khi hover */
+        }
+
+        p {
+            text-align: center;
+            /* Căn giữa các đoạn văn */
+            margin-top: 15px;
+        }
+
+        a {
+            color: #ff7f00;
+            /* Màu cho liên kết */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            /* Gạch chân khi hover */
+        }
+    </style>
 </head>
 
 <body>
