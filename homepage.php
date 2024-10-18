@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 session_start();
 require_once 'config.php';
 
@@ -24,6 +25,22 @@ if (isset($_SESSION['success'])) {
 ?>
 
 
+=======
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "pthtweb";
+
+// Tạo kết nối
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Kiểm tra kết nối
+if ($conn->connect_error) {
+    die("Kết nối thất bại: " . $conn->connect_error);
+}
+?>
+
+>>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
 <html>
 
 <head>
@@ -358,6 +375,7 @@ if (isset($_SESSION['success'])) {
                 <i class="fas fa-phone-alt">
                 </i>
                 <span>
+<<<<<<< HEAD
                     0835886837
                 </span>
             </div>
@@ -379,6 +397,17 @@ if (isset($_SESSION['success'])) {
                         <?php endif; ?>
                     </div>
                 </div>
+=======
+                    0938119439
+                </span>
+            </div>
+            <div class="account">
+                <i class="fas fa-user">
+                </i>
+                <span>
+                    Tài khoản
+                </span>
+>>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
             </div>
         </div>
     </div>
@@ -586,6 +615,7 @@ if (isset($_SESSION['success'])) {
             </div>
             <div class="listings">
                 <?php
+<<<<<<< HEAD
                 // Truy vấn để lấy thông tin xe, hãng xe, dòng xe và ảnh
                 $sql = "SELECT xe.*, hang_xe.ten_hang_xe as hang_xe, dong_xe.ten_dong_xe as dong_xe, GROUP_CONCAT(anh_xe.url_anh) as all_images
             FROM xe
@@ -615,11 +645,35 @@ if (isset($_SESSION['success'])) {
                         echo '</div>';
 
                         // Hiển thị thông tin xe
+=======
+                $sql = "SELECT xe.*, GROUP_CONCAT(anh_xe.url_anh) as all_images 
+            FROM xe 
+            LEFT JOIN anh_xe ON xe.id = anh_xe.xe_id 
+            GROUP BY xe.id 
+            LIMIT 10";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $images = explode(',', $row["all_images"]);
+                        echo '<div class="listing">';
+                        echo '<div class="image-container">';
+                        foreach ($images as $index => $image) {
+                            echo '<img src="' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' . ($index == 0 ? 'class="active"' : '') . '/>';
+                        }
+                        echo '<button class="prev-btn">&#10094;</button>';
+                        echo '<button class="next-btn">&#10095;</button>';
+                        echo '</div>';
+>>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
                         echo '<div class="details">';
                         echo '<h3>' . $row["hang_xe"] . ' ' . $row["dong_xe"] . ' ' . $row["phien_ban"] . '</h3>';
                         echo '<div class="info-grid">';
                         echo '<div class="info-item"><i class="fas fa-calendar-alt"></i> ' . $row["nam_san_xuat"] . '</div>';
+<<<<<<< HEAD
                         echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["odo"]) . ' km</div>';
+=======
+                        echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["so_km"]) . ' km</div>';
+>>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
                         echo '<div class="info-item"><i class="fas fa-gas-pump"></i> ' . $row["nhien_lieu"] . '</div>';
                         echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
                         echo '</div>';
@@ -632,6 +686,7 @@ if (isset($_SESSION['success'])) {
                 }
                 ?>
             </div>
+<<<<<<< HEAD
 
 
         </div>
@@ -691,6 +746,10 @@ if (isset($_SESSION['success'])) {
         ?>
     </div> -->
 
+=======
+        </div>
+    </div>
+>>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
     <script>
         function setupImageSlider() {
             const listings = document.querySelectorAll('.listing');
@@ -727,7 +786,10 @@ if (isset($_SESSION['success'])) {
 
         setupImageSlider();
     </script>
+<<<<<<< HEAD
     <script src="script.js"></script>
+=======
+>>>>>>> 6b50c3c757341fd84cafd15dc9906f7a4e8ea91b
 </body>
 
 </html>
