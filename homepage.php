@@ -23,7 +23,7 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 
-
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -33,20 +33,6 @@ if (isset($_SESSION['success'])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css">
-    <script>
-        function updateValue(id, value) {
-            if (id === 'priceValue' && value > 1000) {
-                document.getElementById(id).innerText = (value / 1000).toFixed(1) + ' tỷ';
-            } else {
-                document.getElementById(id).innerText = value + ' triệu';
-            }
-        }
-
-        function toggleDropdown(element) {
-            const ul = element.nextElementSibling;
-            ul.style.display = ul.style.display === 'none' || ul.style.display === '' ? 'block' : 'none';
-        }
-    </script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -317,6 +303,25 @@ if (isset($_SESSION['success'])) {
             font-size: 14px;
             color: #666;
         }
+
+        .listing .details a {
+            display: inline-block;
+            background-color: #ff7f00;
+            /* Màu chủ đạo của trang */
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .listing .details a:hover {
+            background-color: #ff9000;
+            /* Màu sáng hơn khi hover */
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
@@ -555,7 +560,7 @@ if (isset($_SESSION['success'])) {
         </div>
         <div class="content">
             <h2>
-                Mua bán oto - Xe ô tô cũ - Xe hơi mới toàn quốc
+                Mua bán ô tô cũ toàn quốc
             </h2>
             <p>
                 Có 1088 tin bán xe giá từ 103 triệu đến 10 tỷ 390 triệu cập nhập mới nhất 10/2024
@@ -624,6 +629,7 @@ if (isset($_SESSION['success'])) {
                         echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
                         echo '</div>';
                         echo '<div class="price"><i class="fas fa-tag"></i> ' . number_format($row["gia"]) . ' VNĐ</div>';
+                        echo '<a href="car_detail.php?id=' . $row['id'] . '">Xem chi tiết</a>'; // Thêm liên kết đến trang chi tiết
                         echo '</div>';
                         echo '</div>';
                     }
@@ -636,60 +642,7 @@ if (isset($_SESSION['success'])) {
 
         </div>
     </div>
-    <!-- <div class="listings">
-        <?php
-        // Truy vấn để lấy thông tin xe, hãng xe, dòng xe và ảnh
-        $sql = "SELECT xe.*, hang_xe.ten_hang as hang_xe, dong_xe.ten_dong as dong_xe, GROUP_CONCAT(anh_xe.url_anh) as all_images
-        FROM xe
-        LEFT JOIN anh_xe ON xe.id = anh_xe.xe_id
-        LEFT JOIN hang_xe ON xe.hang_xe_id = hang_xe.id
-        LEFT JOIN dong_xe ON xe.dong_xe_id = dong_xe.id
-        GROUP BY xe.id
-        LIMIT 10";
 
-        $result = $conn->query($sql);
-
-        if (!$result) {
-            // Hiển thị lỗi SQL
-            echo "Lỗi truy vấn SQL: " . $conn->error;
-        } else {
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $images = explode(',', $row["all_images"]); // Chuyển các ảnh thành mảng
-        
-                    echo '<div class="listing">';
-                    echo '<div class="image-container">';
-
-                    // Hiển thị các ảnh của xe
-                    foreach ($images as $index => $image) {
-                        echo '<img src="uploads/' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' . ($index == 0 ? 'class="active"' : '') . ' />';
-                    }
-
-                    // Nút điều hướng ảnh
-                    echo '<button class="prev-btn">&#10094;</button>';
-                    echo '<button class="next-btn">&#10095;</button>';
-                    echo '</div>';
-
-                    // Hiển thị thông tin xe
-                    echo '<div class="details">';
-                    echo '<h3>' . $row["hang_xe"] . ' ' . $row["dong_xe"] . ' ' . $row["phien_ban"] . '</h3>';
-                    echo '<div class="info-grid">';
-                    echo '<div class="info-item"><i class="fas fa-calendar-alt"></i> ' . $row["nam_san_xuat"] . '</div>';
-                    echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["odo"]) . ' km</div>';
-                    echo '<div class="info-item"><i class="fas fa-gas-pump"></i> ' . $row["nhien_lieu"] . '</div>';
-                    echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
-                    echo '</div>';
-                    echo '<div class="price"><i class="fas fa-tag"></i> ' . number_format($row["gia"]) . ' VNĐ</div>';
-                    echo '</div>';
-                    echo '</div>';
-                }
-            } else {
-                echo "Không có xe nào được tìm thấy";
-            }
-        }
-
-        ?>
-    </div> -->
 
     <script>
         function setupImageSlider() {
@@ -726,6 +679,19 @@ if (isset($_SESSION['success'])) {
         }
 
         setupImageSlider();
+
+        function updateValue(id, value) {
+            if (id === 'priceValue' && value > 1000) {
+                document.getElementById(id).innerText = (value / 1000).toFixed(1) + ' tỷ';
+            } else {
+                document.getElementById(id).innerText = value + ' triệu';
+            }
+        }
+
+        function toggleDropdown(element) {
+            const ul = element.nextElementSibling;
+            ul.style.display = ul.style.display === 'none' || ul.style.display === '' ? 'block' : 'none';
+        }
     </script>
     <script src="script.js"></script>
 </body>

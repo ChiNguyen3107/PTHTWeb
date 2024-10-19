@@ -15,3 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function toggleDropdown(element) {
+    const ul = element.nextElementSibling;
+    ul.classList.toggle('show');
+    const icon = element.querySelector('i');
+    icon.classList.toggle('fa-chevron-down');
+    icon.classList.toggle('fa-chevron-up');
+}
