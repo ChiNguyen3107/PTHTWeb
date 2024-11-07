@@ -4,6 +4,17 @@ session_start();
 require_once __DIR__ . '/../config.php';
 
 $is_logged_in = isset($_SESSION['user_id']);
+
+// Nếu đã đăng nhập, lấy thông tin người dùng
+if ($is_logged_in) {
+    $user_id = $_SESSION['user_id'];
+    $stmt = $conn->prepare("SELECT ho_ten FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $user_name = $user['ho_ten'];
+}
 // Lấy ID xe từ URL
 if (isset($_GET['id'])) {
     $xe_id = $_GET['id'];
@@ -49,13 +60,13 @@ if (isset($_GET['id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="Css/_detail_car.css">
-    
+    <script src="../script.js"></script>
 </head>
 
 <body>
     <div class="header">
         <div class="logo">
-            <a href="homepage.php" title="CaR88 Vietnam">
+            <a href="../homepage.php" title="CaR88 Vietnam">
                 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="40" viewBox="0 0 150 40">
                     <rect x="0" y="0" width="150" height="40" rx="5" ry="5" fill="#ff7f00" />
                     <text x="10" y="28" font-family="Arial, sans-serif" font-size="22" font-weight="bold"
@@ -167,6 +178,12 @@ if (isset($_GET['id'])) {
 
             <a href="tel:0835886837" class="button">Gọi người thuê</a>
             <a href="Order_Form.php?id=<?php echo $car['id']; ?>" class="button">Đặt thuê</a>
+            <h2>Giới hạn quãng đường</h2>
+            <i>2000km (Nếu quá giới hạn quãng đường sẽ phụ thu  5000 VND/km)</i>
+            <h2>Giới hạn thời gian</h2>
+            <i>Vượt quá thời gian thuê trong hợp đồng sẽ phụ thu 5000 VND/giờ</i>
+
+
         </div>
     </div>
     <div class="car-container">
@@ -204,7 +221,7 @@ if (isset($_GET['id'])) {
             </table>
         </div>
         <div class="car-description">
-            <h3><i class="fas fa-info-circle"></i> Mô tả</h3>
+            <h3><i class="fas fa-info-circle"></i>Mô tả</h3>
             <p><?php echo nl2br($car['mo_ta']); ?></p>
         </div>
     </div>

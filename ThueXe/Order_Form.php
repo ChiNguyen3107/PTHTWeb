@@ -61,13 +61,13 @@ if (isset($_GET['id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="Css/Order.css">
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
 </head>
 
 <body>
     <div class="header">
         <div class="logo">
-            <a href="homepage.php" title="CaR88 Vietnam">
+            <a href="../homepage.php" title="CaR88 Vietnam">
                 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="40" viewBox="0 0 150 40">
                     <rect x="0" y="0" width="150" height="40" rx="5" ry="5" fill="#ff7f00" />
                     <text x="10" y="28" font-family="Arial, sans-serif" font-size="22" font-weight="bold"
@@ -83,6 +83,9 @@ if (isset($_GET['id'])) {
             </a>
             <a href="#">
                 Bán xe
+            </a>
+            <a href="#">
+                Thuê xe
             </a>
             <a href="#">
                 Giới thiệu
@@ -158,7 +161,7 @@ if (isset($_GET['id'])) {
                 <div class="container">
                     <h2>CHI TIẾT GIÁ</h2>
                     <hr>
-                    <p>Đơn giá <span><?php echo  number_format($car['gia'])?></span></p>
+                    <p>Đơn giá <span><?php echo  number_format($car['gia']) ?></span></p>
                     <p>Thời gian thuê <span>× 1 ngày</span></p>
                     <hr>
                     <p>Giá cơ bản <span>600.000 đ</span></p>
@@ -174,18 +177,12 @@ if (isset($_GET['id'])) {
             </h3>
             <form>
                 <input placeholder="Nhập họ tên" type="text" />
+                <input placeholder="Nhập số CCCD" type="email" />
                 <input placeholder="Nhập số điện thoại" type="text" />
                 <input placeholder="Nhập email" type="email" />
+                <input placeholder="Nhập địa chỉ" type="email" />
                 <textarea placeholder="Ghi chú của khách hàng"></textarea>
                 <div class="payment-method">
-                    <label>
-                        <input name="payment" type="radio" value="prepay" />
-                        Trả trước
-                    </label>
-                    <label>
-                        <input checked="" name="payment" type="radio" value="postpay" />
-                        Trả sau
-                    </label>
                     <label>
                         <input name="payment" type="radio" value="atm" />
                         Thẻ ATM nội địa
@@ -212,7 +209,7 @@ if (isset($_GET['id'])) {
                     <button type="submit">
                         Hoàn tất đặt xe
                     </button>
-                    <button type="button">
+                    <button type="button" onclick="goBack()">
                         Quay lại
                     </button>
                 </div>
