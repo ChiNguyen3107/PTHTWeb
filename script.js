@@ -23,3 +23,6 @@ function toggleDropdown(element) {
     icon.classList.toggle('fa-chevron-down');
     icon.classList.toggle('fa-chevron-up');
 }
+function goBack() {
+    window.history.back(); // Quay lại trang trước
+}

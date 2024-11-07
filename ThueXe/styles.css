@@ -849,29 +849,47 @@ input[type="submit"]:hover {
     color: #ff7f00; /* Đổi màu khi hover */
 }
 
-.footer-section .contact-form .contact-input {
-    
+
+
+.footer-section .contact-form {
+    max-width: 400px; /* Giới hạn chiều rộng của form */
+    margin: auto; /* Canh giữa trên trang */
+    padding: 20px;
+    background-color: #630a0a;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Căn giữa tiêu đề */
+}
+
+
+
+.contact-input {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: none;
+    box-sizing: border-box;
     background-color: #444; /* Màu nền ô nhập liệu tối hơn */
     color: #ffffff;
 }
 
-
-
-.footer-section.contact-form .btn {
-    padding: 10px 15px;
-    background-color: #ff7f00; /* Màu nền nút */
+.contact-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
     color: #fff;
     border: none;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.footer-section.contact-form .btn:hover {
-    background-color: #e66f00; /* Đổi màu khi hover */
+.contact-btn:hover {
+    background-color: #0056b3;
 }
+
+
 
 .footer-bottom {
     background-color: #111; /* Màu nền tối hơn cho phần cuối */
