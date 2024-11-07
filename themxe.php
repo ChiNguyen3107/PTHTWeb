@@ -24,7 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $so_km = $_POST['so_km'];
     $nhien_lieu = $_POST['nhien_lieu'];
     $hop_so = $_POST['hop_so'];
-    $gia_ban = $_POST['gia_ban'];
+    $gia = $_POST['gia'];
+    $mo_ta = $_POST['mota'];
+    $thue_xe= $_POST['thue_xe'];
+
+
 
     // Xử lý ảnh
     $anh_xe = $_FILES['anh_xe'];
@@ -58,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Lưu thông tin xe vào cơ sở dữ liệu
-    $sql = "INSERT INTO xe (hang_xe_id, dong_xe_id, phien_ban, nam_san_xuat, kieu_dang, xuat_xu, so_ghe_ngoi, odo, nhien_lieu, hop_so, gia, mo_ta) 
-            VALUES ('$hang_xe_id', '$dong_xe_id', '$phien_ban', '$nam_san_xuat', '$kieu_dang', '$xuat_xu', '$so_ghe_ngoi', '$so_km', '$nhien_lieu', '$hop_so', '$gia_ban', 'Mô tả xe')"; // Sửa tên các cột và thêm mô tả xe
+    $sql = "INSERT INTO xe (hang_xe_id, dong_xe_id, phien_ban, nam_san_xuat, kieu_dang, xuat_xu, so_ghe_ngoi, odo, nhien_lieu, hop_so, gia, mo_ta,thue_xe) 
+            VALUES ('$hang_xe_id', '$dong_xe_id', '$phien_ban', '$nam_san_xuat', '$kieu_dang', '$xuat_xu', '$so_ghe_ngoi', '$so_km', '$nhien_lieu', '$hop_so', '$gia', '$mo_ta','$thue_xe')"; // Sửa tên các cột và thêm mô tả xe
 
     if ($conn->query($sql) === TRUE) {
         // Lấy ID của xe vừa thêm

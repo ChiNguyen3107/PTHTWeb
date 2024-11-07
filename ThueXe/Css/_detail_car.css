@@ -1,0 +1,234 @@
+.car-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.car-images {
+    flex: 1;
+    min-width: 300px;
+    margin-right: 20px;
+}
+
+.car-images img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+#main-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.thumbnails img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.thumbnails img:hover {
+    opacity: 0.7;
+}
+
+.car-info {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.car-info h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.car-info h2 {
+    color: #ff7f00;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.car-info table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.car-info table td {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.car-info table td:first-child {
+    font-weight: bold;
+    color: #666;
+    width: 40%;
+}
+
+/* Khung với đổ bóng cho car-container và car-description */
+.car-container,
+.car-description {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    /* Thêm thuộc tính flex */
+}
+
+/* Đặt car-container và car-description nằm ngang */
+.car-container {
+    flex-direction: column;
+    /* Có thể thay đổi tùy theo nội dung */
+}
+
+.car-details,
+.car-description {
+    flex: 1;
+}
+
+/* Các thành phần bên trong car-container và car-description */
+.car-details h3,
+.car-description h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.car-details table {
+    width: 100%;
+}
+
+.car-details table th,
+.car-details table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.car-details table th {
+    text-align: left;
+    color: #666;
+    width: 30%;
+}
+
+.car-description p {
+    line-height: 1.6;
+    color: #666;
+}
+
+/* Nút gọi và nhắn tin */
+.button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #ff7f00;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #e67300;
+}
+
+/* Biểu tượng cho các thông tin xe */
+.car-info table td:first-child::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px;
+    color: #ff7f00;
+}
+
+.car-info table tr:nth-child(1) td:first-child::before {
+    content: "\f1b9";
+    /* Biểu tượng xe */
+}
+
+.car-info table tr:nth-child(2) td:first-child::before {
+    content: "\f52f";
+    /* Biểu tượng động cơ */
+}
+
+.car-info table tr:nth-child(3) td:first-child::before {
+    content: "\f018";
+    /* Biểu tượng nhiên liệu */
+}
+
+.car-info table tr:nth-child(4) td:first-child::before {
+    content: "\f0c0";
+    /* Biểu tượng số ghế */
+}
+
+.car-info table tr:nth-child(5) td:first-child::before {
+    content: "\f013";
+    /* Biểu tượng năm sản xuất */
+}
+
+.car-info table tr:nth-child(6) td:first-child::before {
+    content: "\f3c5";
+    /* Biểu tượng kiểu dáng */
+}
+
+/* Hiệu ứng hover cho các phần tử */
+.car-details table tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.3s ease;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .car-detail {
+        flex-direction: column;
+    }
+
+    .car-info {
+        margin-bottom: 20px;
+        /* khoảng cách dưới cho car-info */
+    }
+
+    .car-container,
+    .car-description {
+        flex-direction: column;
+        /* Đặt dọc trên thiết bị di động */
+    }
+}
+
+/* Thêm animation cho các phần tử khi trang tải */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.car-detail,
+.car-container,
+.car-description {
+    animation: fadeIn 0.5s ease-out;
+}
