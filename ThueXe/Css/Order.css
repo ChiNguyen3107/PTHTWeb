@@ -1,0 +1,139 @@
+.main {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.main .left, .main .right {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+.main .left {
+    width: 300px;
+}
+.main .left img {
+    width: 100%;
+    border-radius: 10px;
+}
+.main .left h2 {
+    color: #000000;
+    font-size: 20px;
+    margin: 10px 0;
+}
+.main .left ul {
+    list-style: none;
+    padding: 0;
+}
+.main .left ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.main .left ul li i {
+    margin-right: 10px;
+    color: #FF9000;
+}
+.main .left .price {
+    margin-top: 20px;
+}
+.main .left .price p {
+    margin: 5px 0;
+    color: #FF9000;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+.main .right {
+    width: 600px;
+}
+.main .right h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+.main .right form {
+    display: flex;
+    flex-direction: column;
+}
+.main .right form input, .main .right form textarea, .main .right form select {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+}
+.main .right form .payment-method {
+    display: flex;
+    flex-direction: column;
+}
+.main .right form .payment-method label {
+    margin-bottom: 10px;
+}
+.main .right form .payment-method input {
+    margin-right: 10px;
+}
+.main .right form .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+.main .right form .buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FF9000;
+    color: #fff;
+    cursor: pointer;
+}
+.main .right form .buttons button:hover {
+    background-color: #FFB555;
+}
+.price_order {
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+    border-radius: 8px; 
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.price_order i {
+    margin-right: 10px;
+}
+.price_order .container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+}
+.price_order .container h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+.price_order .container p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #e66f00;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+.price_order .container p span {
+    color: #6c757d;
+}
+.price_order .container p.total {
+    font-weight: bold;
+}
+.price_order .container p.optional-service {
+    font-weight: bold;
+    margin-top: 10px;
+}
+.price_order .container hr {
+    border: none;
+    border-top: 1px solid #e9ecef;
+    margin: 10px 0;
+}

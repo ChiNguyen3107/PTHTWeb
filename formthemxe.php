@@ -82,15 +82,22 @@ if ($conn->connect_error) {
         <select id="hop_so" name="hop_so">
             <option value="">Chọn hộp số</option>
             <option value="Số tự động">Số tự động</option>
-            <option value="Số sàn">Số sàn</ option>
+            <option value="Số sàn">Số sàn</option>
             <option value="Số bán tự động">Số bán tự động</option>
         </select>
 
-        <label for="gia_ban">Giá bán:</label>
-        <input type="number" id="gia_ban" name="gia_ban" min="0">
+        <label for="gia">Giá: </label>
+        <input type="number" id="gia" name="gia" min="0">
 
         <label for="mota">Mô Tả Xe:</label>
         <textarea id="mota" name="mota" required></textarea>
+
+        <label for="thue_xe">Loại hình kinh doanh</label>
+        <select id="thue_xe" name="thue_xe">
+            <option value="">Chọn loại hình kinh doanh</option>
+            <option value="0">Bán</option>
+            <option value="1">Thuê</option>
+        </select>
 
         <label for="anh_xe">Ảnh xe:</label>
         <input type="file" id="anh_xe" name="anh_xe[]" multiple required>

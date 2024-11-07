@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once __DIR__ . '/../config.php';
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
 $is_logged_in = isset($_SESSION['user_id']);
@@ -32,297 +32,8 @@ if (isset($_SESSION['success'])) {
     </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #fff;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .header .logo img {
-            height: 40px;
-        }
-
-        .header .nav {
-            display: flex;
-            gap: 20px;
-        }
-
-        .header .nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .header .nav a:hover {
-            color: #ff7f00;
-            /* Đổi màu chữ khi hover */
-        }
-
-        .header .actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .header .actions .btn {
-            background-color: #ff7f00;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .header .actions .btn:hover {
-            background-color: #ff9000;
-            transform: scale(1.05);
-            /* Phóng to nút khi hover */
-        }
-
-        .header .actions .contact,
-        .header .actions .account {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header .actions .contact i,
-        .header .actions .account i {
-            color: #ff7f00;
-        }
-
-        .banner {
-            display: flex;
-            gap: 10px;
-            padding: 20px;
-            background-color: #fff;
-        }
-
-        .banner img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            transition: transform 0.3s ease;
-        }
-
-        .banner img:hover {
-            transform: scale(1.05);
-            /* Phóng to ảnh khi hover */
-        }
-
-        .main {
-            display: flex;
-            padding: 20px;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            margin-right: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .sidebar .filter h4 {
-            font-size: 16px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .sidebar .filter ul {
-            list-style: none;
-            padding: 0;
-            display: none;
-        }
-
-        .sidebar .filter ul li {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar .filter ul li i {
-            color: #333;
-        }
-
-        .content {
-            flex: 1;
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .content h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .content p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .content .search-bar {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .content .search-bar input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .content .search-bar button {
-            padding: 10px 20px;
-            background-color: #ff7f00;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            margin-left: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .content .search-bar button:hover {
-            background-color: #ff9000;
-            transform: scale(1.05);
-            /* Phóng to nút khi hover */
-        }
-
-        .content .sort {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .content .sort .sort-by {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .content .sort .sort-by select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .content .listings {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .content .listings .listing {
-            width: calc(50% - 10px);
-            background-color: #fff;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
-
-        .content .listings .listing:hover {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            transform: translateY(-5px);
-            /* Di chuyển mục lên khi hover */
-        }
-
-        .content .listings .listing img {
-            width: 100%;
-            height: auto;
-        }
-
-        .content .listings .listing .details {
-            padding: 20px;
-        }
-
-        .content .listings .listing .details h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .content .listings .listing .details p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .content .listings .listing .details .info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .content .listings .listing .details .info i {
-            color: #ff7f00;
-        }
-
-        .slider-container {
-            margin-bottom: 20px;
-        }
-
-        .slider-container input[type="range"] {
-            width: 100%;
-        }
-
-        .slider-values {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .listing .details a {
-            display: inline-block;
-            background-color: #ff7f00;
-            /* Màu chủ đạo của trang */
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-top: 10px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            font-weight: bold;
-        }
-
-        .listing .details a:hover {
-            background-color: #ff9000;
-            /* Màu sáng hơn khi hover */
-            transform: translateY(-2px);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 
 <body>
@@ -344,9 +55,6 @@ if (isset($_SESSION['success'])) {
             </a>
             <a href="#">
                 Bán xe
-            </a>
-            <a href="ThueXe/ThueXe.php">
-                Thuê xe
             </a>
             <a href="#">
                 Giới thiệu
@@ -392,10 +100,10 @@ if (isset($_SESSION['success'])) {
     </div>
     <div class="banner">
 
-        <img src="image/banner1.jpg" alt="banner1">
-        <img src="image/banner2.jpg" alt="banner2">
-        <img src="image/banner3.jpg" alt="banner3">
-        <img src="image/banner4.jpg" alt="banner4">
+        <img src="../image/banner1.jpg" alt="banner1">
+        <img src="../image/banner2.jpg" alt="banner2">
+        <img src="../image/banner3.jpg" alt="banner3">
+        <img src="../image/banner4.jpg" alt="banner4">
     </div>
     <div class="main">
         <div class="sidebar">
@@ -407,7 +115,7 @@ if (isset($_SESSION['success'])) {
                     HÃNG XE
                     <i class="fas fa-chevron-down"></i>
                 </h4>
-                <ul>
+                <ul class=".dropdown-menu">
                     <li><input type="checkbox" id="toyota"> <label for="toyota">Toyota</label></li>
                     <li><input type="checkbox" id="honda"> <label for="honda">Honda</label></li>
                     <li><input type="checkbox" id="hyundai"> <label for="hyundai">Hyundai</label></li>
@@ -600,7 +308,7 @@ if (isset($_SESSION['success'])) {
             LEFT JOIN anh_xe ON xe.id = anh_xe.xe_id
             LEFT JOIN hang_xe ON xe.hang_xe_id = hang_xe.id
             LEFT JOIN dong_xe ON xe.dong_xe_id = dong_xe.id
-            WHERE xe.thue_xe = 0
+            WHERE xe.thue_xe = 1
             GROUP BY xe.id
             LIMIT 10";
 
@@ -615,7 +323,7 @@ if (isset($_SESSION['success'])) {
 
                         // Hiển thị các ảnh của xe
                         foreach ($images as $index => $image) {
-                            echo '<img src="uploads/' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' . ($index == 0 ? 'class="active"' : '') . ' />';
+                            echo '<img src="../uploads/' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' . ($index == 0 ? 'class="active"' : '') . ' />';
                         }
 
                         // Nút điều hướng ảnh
@@ -633,7 +341,7 @@ if (isset($_SESSION['success'])) {
                         echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
                         echo '</div>';
                         echo '<div class="price"><i class="fas fa-tag"></i> ' . number_format($row["gia"]) . ' VNĐ</div>';
-                        echo '<a href="car_detail.php?id=' . $row['id'] . '">Xem chi tiết</a>'; // Thêm liên kết đến trang chi tiết
+                        echo '<a href="Thuexe_car_detail.php?id=' . $row['id'] . '">Xem chi tiết</a>'; // Thêm liên kết đến trang chi tiết
                         echo '</div>';
                         echo '</div>';
                     }
@@ -642,8 +350,6 @@ if (isset($_SESSION['success'])) {
                 }
                 ?>
             </div>
-
-
         </div>
     </div>
 
@@ -742,9 +448,7 @@ if (isset($_SESSION['success'])) {
         &copy; 2023 CaR88.com | Thiết kế bởi Nhóm 9
     </div>
 </footer>
-
 </html>
-
 <?php
 $conn->close();
 ?>
