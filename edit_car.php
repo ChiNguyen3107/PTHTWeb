@@ -46,8 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gia = $_POST['gia'];
     $mo_ta = $_POST['mo_ta'];
 
-
-
     $sql = "UPDATE xe SET 
     hang_xe_id = ?, dong_xe_id = ?, phien_ban = ?, nam_san_xuat = ?,
     kieu_dang = ?, xuat_xu = ?, so_ghe_ngoi = ?, odo = ?,
@@ -73,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     );
 
     if ($stmt->execute()) {
+        $_SESSION['success_message'] = "Cập nhật thông tin xe thành công.";
         header("Location: manage_cars.php");
         exit();
     } else {
@@ -81,8 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Lấy danh sách hãng xe và dòng xe
-$hang_xe_list = $conn->query("SELECT * FROM hang_xe ");
-$dong_xe_list = $conn->query("SELECT * FROM dong_xe");
+$hang_xe_list = $conn->query("SELECT * FROM hang_xe");
+// $dong_xe_list = $conn->query("SELECT * FROM dong_xe");
 ?>
 
 <!DOCTYPE html>
@@ -92,191 +91,208 @@ $dong_xe_list = $conn->query("SELECT * FROM dong_xe");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cập nhật thông tin xe - CaR88</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            display: flex;
-            height: 100vh;
-        }
-
         .sidebar {
-            width: 200px;
-            background-color: #333;
+            height: 100vh;
+            background-color: #343a40;
+        }
+
+        .sidebar a {
             color: #fff;
-            height: 100%;
-            padding-top: 20px;
         }
 
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            padding: 10px 15px;
-        }
-
-        .sidebar ul li a {
-            color: #fff;
-            text-decoration: none;
-            display: block;
-        }
-
-        .sidebar ul li:hover {
-            background-color: #444;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 15px;
-        }
-
-        h1 {
-            color: #333;
-            font-size: 24px;
-        }
-
-        form {
-            background: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-            /* Đảm bảo padding và border không làm thay đổi kích thước tổng thể */
-        }
-
-
-
-
-        input[type="submit"] {
-            background-color: #ff7f00;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #e66f00;
+        .sidebar a:hover {
+            background-color: #495057;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <h2>Cập nhật thông tin xe</h2>
-            <ul>
-                <li><a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="manage_cars.php"><i class="fas fa-car"></i> Quản lý xe</a></li>
-                <li><a href="manage_staff.php"><i class="fas fa-user-tie"></i> Quản lý nhân viên</a></li>
-                <li><a href="manage_users.php"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
-                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
-            </ul>
-        </div>
-        <div class="main-content">
-            <h1>Cập nhật thông tin xe</h1>
-            <?php if (isset($error)) { ?>
-                <p style="color: red;"><?= $error ?></p>
-            <?php } ?>
-            <form action="" method="post">
-                <label for="hang_xe_id">Hãng xe:</label>
-                <select name="hang_xe_id" id="hang_xe_id">
-                    <?php while ($row = $hang_xe_list->fetch_assoc()) { ?>
-                        <option value="<?= $row['id'] ?>" <?= $car['hang_xe_id'] == $row['id'] ? 'selected' : '' ?>>
-                            <?= $row['ten_hang_xe'] ?>
-                        </option>
-                    <?php } ?>
-                </select>
-                <br><br>
-                <label for="dong_xe_id">Dòng xe:</label>
-                <select name="dong_xe_id" id="dong_xe_id">
-                    <?php while ($row = $dong_xe_list->fetch_assoc()) { ?>
-                        <option value="<?= $row['id'] ?>" <?= $car['dong_xe_id'] == $row['id'] ? 'selected' : '' ?>>
-                            <?= $row['ten_dong_xe'] ?>
-                        </option>
-                    <?php } ?>
-                </select>
-                <br><br>
-                <label for="phien_ban">Phiên bản:</label>
-                <input type="text" name="phien_ban" id="phien_ban" value="<?= $car['phien_ban'] ?>">
-                <br><br>
-                <label for="nam_san_xuat">Năm sản xuất:</label>
-                <input type="number" name="nam_san_xuat" id="nam_san_xuat" value="<?= $car['nam_san_xuat'] ?>">
-                <br><br>
-                <label for="kieu_dang">Kiểu dáng:</label>
-                <input type="text" name="kieu_dang" id="kieu_dang" value="<?= $car['kieu_dang'] ?>">
-                <br><br>
-                <label for="xuat_xu">Xuất xứ:</label>
-                <input type="text" name="xuat_xu" id="xuat_xu" value="<?= $car['xuat_xu'] ?>">
-                <br><br>
-                <label for="so_ghe_ngoi">Số ghế ngồi:</label>
-                <input type="number" name="so_ghe_ngoi" id="so_ghe_ngoi" value="<?= $car['so_ghe_ngoi'] ?>">
-                <br><br>
-                <label for="odo">Odo:</label>
-                <input type="number" name="odo" id="odo" value="<?= $car['odo'] ?>">
-                <br><br>
-                <label for="nhien_lieu">Nhiên liệu:</label>
-                <select id="nhien_lieu" name="nhien_lieu">
-                    <option value="">Chọn nhiên liệu</option>
-                    <option value="Xăng" <?php echo ($car['nhien_lieu'] == 'Xăng') ? 'selected' : ''; ?>>Xăng</option>
-                    <option value="Dầu" <?php echo ($car['nhien_lieu'] == 'Dầu') ? 'selected' : ''; ?>>Dầu</option>
-                    <option value="Điện" <?php echo ($car['nhien_lieu'] == 'Điện') ? 'selected' : ''; ?>>Điện</option>
-                    <option value="Hybrid" <?php echo ($car['nhien_lieu'] == 'Hybrid') ? 'selected' : ''; ?>>Hybrid
-                    </option>
-                </select>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin_dashboard.php">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="manage_cars.php">
+                                <i class="fas fa-car me-2"></i>
+                                Quản lý xe
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="manage_staff.php">
+                                <i class="fas fa-user-tie me-2"></i>
+                                Quản lý nhân viên
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="manage_users.php">
+                                <i class="fas fa-users me-2"></i>
+                                Quản lý người dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-                <label for="hop_so">Hộp số:</label>
-                <select id="hop_so" name="hop_so">
-                    <option value="">Chọn hộp số</option>
-                    <option value="Số tự động" <?= ($car['hop_so'] == 'Số tự động') ? 'selected' : ''; ?>>Số tự động
-                    </option>
-                    <option value="Số sàn" <?= ($car['hop_so'] == 'Số sàn') ? 'selected' : ''; ?>>Số sàn</option>
-                    <option value="Số bán tự động" <?= ($car['hop_so'] == 'Số bán tự động') ? 'selected' : ''; ?>>Số bán tự
-                        động</option>
-                </select>
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Cập nhật thông tin xe</h1>
+                </div>
 
-                <label for="gia">Giá:</label>
-                <input type="number" name="gia" id="gia" value="<?= $car['gia'] ?>">
-                <br><br>
-                <label for="mo_ta">Mô tả:</label>
-                <textarea name="mo_ta" id="mo_ta"><?= $car['mo_ta'] ?></textarea>
-                <br><br>
-                <input type="submit" value="Cập nhật">
-            </form>
+                <?php if (isset($error)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= $error ?>
+                    </div>
+                <?php endif; ?>
+
+                <form action="" method="post" class="needs-validation" novalidate>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="hang_xe_id" class="form-label required-field">Hãng xe:</label>
+                            <select name="hang_xe_id" id="hang_xe_id" class="form-select" required>
+                                <option value="">Chọn hãng xe</option>
+                                <?php while ($row = $hang_xe_list->fetch_assoc()): ?>
+                                    <option value="<?= $row['id'] ?>" <?= $car['hang_xe_id'] == $row['id'] ? 'selected' : '' ?>>
+                                        <?= $row['ten_hang_xe'] ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dong_xe_id" class="form-label required-field">Dòng xe:</label>
+                            <select name="dong_xe_id" id="dong_xe_id" class="form-select" required>
+                                <option value="">Chọn dòng xe</option>
+                                <!-- Các option sẽ được load động bằng JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phien_ban" class="form-label">Phiên bản:</label>
+                        <input type="text" name="phien_ban" id="phien_ban" class="form-control"
+                            value="<?= $car['phien_ban'] ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nam_san_xuat" class="form-label">Năm sản xuất:</label>
+                        <input type="number" name="nam_san_xuat" id="nam_san_xuat" class="form-control"
+                            value="<?= $car['nam_san_xuat'] ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="kieu_dang" class="form-label">Kiểu dáng:</label>
+                        <input type="text" name="kieu_dang" id="kieu_dang" class="form-control"
+                            value="<?= $car['kieu_dang'] ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="xuat_xu" class="form-label">Xuất xứ:</label>
+                        <input type="text" name="xuat_xu" id="xuat_xu" class="form-control"
+                            value="<?= $car['xuat_xu'] ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="so_ghe_ngoi" class="form-label">Số ghế ngồi:</label>
+                        <input type="number" name="so_ghe_ngoi" id="so_ghe_ngoi" class="form-control"
+                            value="<?= $car['so_ghe_ngoi'] ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="odo" class="form-label">Odo:</label>
+                        <input type="number" name="odo" id="odo" class="form-control" value="<?= $car['odo'] ?>"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nhien_lieu" class="form-label">Nhiên liệu:</label>
+                        <select id="nhien_lieu" name="nhien_lieu" class="form-select" required>
+                            <option value="">Chọn nhiên liệu</option>
+                            <option value="Xăng" <?= ($car['nhien_lieu'] == 'Xăng') ? 'selected' : ''; ?>>Xăng</option>
+                            <option value="Dầu" <?= ($car['nhien_lieu'] == 'Dầu') ? 'selected' : ''; ?>>Dầu</option>
+                            <option value="Điện" <?= ($car['nhien_lieu'] == 'Điện') ? 'selected' : ''; ?>>Điện</option>
+                            <option value="Hybrid" <?= ($car['nhien_lieu'] == 'Hybrid') ? 'selected' : ''; ?>>Hybrid
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hop_so" class="form-label">Hộp số:</label>
+                        <select id="hop_so" name="hop_so" class="form-select" required>
+                            <option value="">Chọn hộp số</option>
+                            <option value="Số tự động" <?= ($car['hop_so'] == 'Số tự động') ? 'selected' : ''; ?>>Số tự
+                                động</option>
+                            <option value="Số sàn" <?= ($car['hop_so'] == 'Số sàn') ? 'selected' : ''; ?>>Số sàn</option>
+                            <option value="Số bán tự động" <?= ($car['hop_so'] == 'Số bán tự động') ? 'selected' : ''; ?>>
+                                Số bán tự động</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gia" class="form-label">Giá:</label>
+                        <input type="number" name="gia" id="gia" class="form-control" value="<?= $car['gia'] ?>"
+                            required>
+                    </div>
+                    <div ```php <div class="mb-3">
+                        <label for="mo_ta" class="form-label">Mô tả:</label>
+                        <textarea name="mo_ta" id="mo_ta" class="form-control" required><?= $car['mo_ta'] ?></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </form>
+            </main>
         </div>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load dòng xe ban đầu cho hãng xe đã chọn
+        loadDongXe(<?= $car['hang_xe_id'] ?>, <?= $car['dong_xe_id'] ?>);
+
+        // Thêm event listener cho việc thay đổi hãng xe
+        document.getElementById('hang_xe_id').addEventListener('change', function() {
+            loadDongXe(this.value);
+        });
+
+        function loadDongXe(hangXeId, selectedDongXeId = null) {
+            if (hangXeId) {
+                fetch('get_dong_xe.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'hang_xe_id=' + hangXeId
+                })
+                .then(response => response.text())
+                .then(data => {
+                    const dongXeSelect = document.getElementById('dong_xe_id');
+                    dongXeSelect.innerHTML = data;
+                    
+                    // Nếu có dòng xe đã chọn trước đó, select lại option đó
+                    if (selectedDongXeId) {
+                        dongXeSelect.value = selectedDongXeId;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            } else {
+                document.getElementById('dong_xe_id').innerHTML = '<option value="">Chọn dòng xe</option>';
+            }
+        }
+    });
+    </script>
 </body>
 
 </html>
