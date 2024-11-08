@@ -58,9 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Lưu thông tin xe vào cơ sở dữ liệu
-    $sql = "INSERT INTO xe (hang_xe_id, dong_xe_id, phien_ban, nam_san_xuat, kieu_dang, xuat_xu, so_ghe_ngoi, odo, nhien_lieu, hop_so, gia, mo_ta) 
-            VALUES ('$hang_xe_id', '$dong_xe_id', '$phien_ban', '$nam_san_xuat', '$kieu_dang', '$xuat_xu', '$so_ghe_ngoi', '$so_km', '$nhien_lieu', '$hop_so', '$gia_ban', 'Mô tả xe')"; // Sửa tên các cột và thêm mô tả xe
+// Lấy giá trị mô tả từ form
+    $mo_ta = $_POST['mo_ta'];  // Thêm dòng này
 
+    $sql = "INSERT INTO xe (hang_xe_id, dong_xe_id, phien_ban, nam_san_xuat, kieu_dang, xuat_xu, so_ghe_ngoi, odo, nhien_lieu, hop_so, gia, mo_ta) 
+        VALUES ('$hang_xe_id', '$dong_xe_id', '$phien_ban', '$nam_san_xuat', '$kieu_dang', '$xuat_xu', '$so_ghe_ngoi', '$so_km', '$nhien_lieu', '$hop_so', '$gia_ban', '$mo_ta')";
     if ($conn->query($sql) === TRUE) {
         // Lấy ID của xe vừa thêm
         $xe_id = $conn->insert_id;
@@ -72,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         echo "Xe đã được thêm thành công!";
-        header("Location: homepage.php");
+        header("Location: manage_cars.php");
         exit();
     } else {
         echo "Lỗi: " . $sql . "<br>" . $conn->error;

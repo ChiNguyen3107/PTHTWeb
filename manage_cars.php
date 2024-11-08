@@ -32,168 +32,107 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý xe - CaR88</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <style>
         :root {
             --primary-color: #ff7f00;
-            /* Màu chính */
             --secondary-color: #f44336;
-            /* Màu phụ */
-            --background-color: #f4f4f4;
-            /* Màu nền */
-            --table-header-color: #ff7f00;
-            /* Màu tiêu đề bảng */
-            --table-row-color: #ffffff;
-            /* Màu hàng bảng */
-            --table-row-hover-color: #ffe4cc;
-            /* Màu hàng khi hover */
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--background-color);
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .btn-container {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-add {
+        .btn-primary {
             background-color: var(--primary-color);
+            border-color: var(--primary-color);
         }
 
-        .btn-add:hover {
-            background-color: var(--hover-color);
+        .btn-primary:hover {
+            background-color: #e67300;
+            border-color: #e67300;
         }
 
-        .btn-back {
-            background-color: var(--primary-color);
-        }
-
-        .btn-back:hover {
-            background-color: var(--hover-color);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--table-row-color);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        th,
-        td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: var(--table-header-color);
-            color: #fff;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        tr:nth-child(even) {
-            background-color: var(--table-row-color);
-        }
-
-        tr:hover {
-            background-color: var(--table-row-hover-color);
-        }
-
-        .btn-edit,
-        .btn-delete {
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-
-        .btn-edit {
-            background-color: var(--primary-color);
-        }
-
-        .btn-edit:hover {
-            background-color: var(--hover-color);
-        }
-
-        .btn-delete {
+        .btn-danger {
             background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
 
-        .btn-delete:hover {
-            background-color: #c62828;
+        .btn-danger:hover {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #ffe4cc;
         }
     </style>
 </head>
 
 <body>
-    <h1>Quản lý xe</h1>
-    <table>
-        <tr>
-            <th>STT</th>
-            <th>Hãng xe</th>
-            <th>Dòng xe</th>
-            <th>Phiên bản</th>
-            <th>Năm sản xuất</th>
-            <th>Giá</th>
-            <th>Thao tác</th>
-        </tr>
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                ?>
-                <tr>
-                    <td><?= $row['id'] ?></td>
-                    <td><?= $row['ten_hang_xe'] ?></td>
-                    <td><?= $row['ten_dong_xe'] ?></td>
-                    <td><?= $row['phien_ban'] ?></td>
-                    <td><?= $row['nam_san_xuat'] ?></td>
-                    <td><?= number_format($row['gia'], 0, ',', '.') ?> VNĐ</td>
-                    <td>
-                        <a href="edit_car.php?id=<?= $row['id'] ?>" class="btn btn-edit">Sửa</a>
-                        <a href="manage_cars.php?delete=<?= $row['id'] ?>" class="btn btn-delete">Xóa</a>
-                    </td>
-                </tr>
-            <?php }
-        } else { ?>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Quản lý xe</h1>
 
-            <tr>
-                <a href="formthemxe.php" class="btn btn-add">Thêm xe mới</a>
-                <td colspan="7">Không có dữ liệu</td>
-            </tr>
-        <?php } ?>
-    </table>
-    <div class="btn-container">
-        <a href="formthemxe.php" class="btn btn-add">Thêm xe mới</a>
-        <a href="admin_dashboard.php" class="btn btn-back">Quay về Dashboard</a>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>STT</th>
+                        <th>Hãng xe</th>
+                        <th>Dòng xe</th>
+                        <th>Phiên bản</th>
+                        <th>Năm sản xuất</th>
+                        <th>Giá</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            ?>
+                            <tr>
+                                <td><?= $row['id'] ?></td>
+                                <td><?= $row['ten_hang_xe'] ?></td>
+                                <td><?= $row['ten_dong_xe'] ?></td>
+                                <td><?= $row['phien_ban'] ?></td>
+                                <td><?= $row['nam_san_xuat'] ?></td>
+                                <td><?= number_format($row['gia'], 0, ',', '.') ?> VNĐ</td>
+                                <td>
+                                    <a href="edit_car.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </a>
+                                    <a href="manage_cars.php?delete=<?= $row['id'] ?>" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa xe này?');">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                        <tr>
+                            <td colspan="7" class="text-center">Không có dữ liệu</td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="formthemxe.php" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Thêm xe mới
+            </a>
+            <a href="admin_dashboard.php" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay về Dashboard
+            </a>
+        </div>
     </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

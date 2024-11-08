@@ -1,12 +1,5 @@
 <?php
-// Kết nối đến cơ sở dữ liệu
-$servername = "localhost"; // Thay đổi nếu cần
-$username = "root"; // Tên người dùng CSDL
-$password = ""; // Mật khẩu CSDL
-$dbname = "pthtweb"; // Tên CSDL
-
-// Tạo kết nối
-$conn = new mysqli($servername, $username, $password, $dbname);
+require_once 'config.php';
 
 if (isset($_POST['hang_xe_id'])) {
     $hang_xe_id = $_POST['hang_xe_id'];
@@ -19,12 +12,11 @@ if (isset($_POST['hang_xe_id'])) {
     $result = $stmt->get_result();
 
     // Tạo option cho combobox
+    echo '<option value="">Chọn dòng xe</option>';
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo "<option value='" . $row['id'] . "'>" . $row['ten_dong_xe'] . "</option>";
         }
-    } else {
-        echo "<option value=''>Không có dòng xe nào</option>";
     }
 
     $stmt->close();
