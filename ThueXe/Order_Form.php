@@ -67,7 +67,7 @@ if (isset($_GET['id'])) {
 <body>
     <div class="header">
         <div class="logo">
-            <a href="homepage.php" title="CaR88 Vietnam">
+            <a href="../homepage.php" title="CaR88 Vietnam">
                 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="40" viewBox="0 0 150 40">
                     <rect x="0" y="0" width="150" height="40" rx="5" ry="5" fill="#ff7f00" />
                     <text x="10" y="28" font-family="Arial, sans-serif" font-size="22" font-weight="bold"
@@ -83,6 +83,9 @@ if (isset($_GET['id'])) {
             </a>
             <a href="#">
                 Bán xe
+            </a>
+            <a href="ThueXe.php">
+                Thuê xe
             </a>
             <a href="#">
                 Giới thiệu

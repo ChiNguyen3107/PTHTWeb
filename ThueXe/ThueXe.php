@@ -33,13 +33,13 @@ if (isset($_SESSION['success'])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
 </head>
 
 <body>
     <div class="header">
         <div class="logo">
-            <a href="homepage.php" title="CaR88 Vietnam">
+            <a href="../homepage.php" title="CaR88 Vietnam">
                 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="40" viewBox="0 0 150 40">
                     <rect x="0" y="0" width="150" height="40" rx="5" ry="5" fill="#ff7f00" />
                     <text x="10" y="28" font-family="Arial, sans-serif" font-size="22" font-weight="bold"
@@ -56,6 +56,9 @@ if (isset($_SESSION['success'])) {
             <a href="#">
                 Bán xe
             </a>
+            <a href="ThueXe.php">
+                Thuê xe
+            </a>
             <a href="#">
                 Giới thiệu
             </a>
@@ -65,7 +68,7 @@ if (isset($_SESSION['success'])) {
             <a href="#">
                 Vay mua xe
             </a>
-        </div>
+        </div>  
         <div class="actions">
             <button class="btn">
                 ĐĂNG TIN
@@ -86,12 +89,12 @@ if (isset($_SESSION['success'])) {
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])): ?>
                             <?php if ($_SESSION['user_role'] == 1): ?>
-                                <a href="admin_dashboard.php">Admin Dashboard</a>
+                                <a href="../admin_dashboard.php">Admin Dashboard</a>
                             <?php endif; ?>
-                            <a href="logout.php">Đăng xuất</a>
+                            <a href="../logout.php">Đăng xuất</a>
                         <?php else: ?>
-                            <a href="login.php">Đăng nhập</a>
-                            <a href="register.php">Đăng ký</a>
+                            <a href="../login.php">Đăng nhập</a>
+                            <a href="../register.php">Đăng ký</a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -107,167 +110,99 @@ if (isset($_SESSION['success'])) {
     </div>
     <div class="main">
         <div class="sidebar">
-            <h3>
-                BỘ LỌC
-            </h3>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    HÃNG XE
-                    <i class="fas fa-chevron-down"></i>
-                </h4>
-                <ul class=".dropdown-menu">
-                    <li><input type="checkbox" id="toyota"> <label for="toyota">Toyota</label></li>
-                    <li><input type="checkbox" id="honda"> <label for="honda">Honda</label></li>
-                    <li><input type="checkbox" id="hyundai"> <label for="hyundai">Hyundai</label></li>
-                    <li><input type="checkbox" id="kia"> <label for="kia">KIA</label></li>
-                    <li><input type="checkbox" id="mazda"> <label for="mazda">Mazda</label></li>
-                    <li><input type="checkbox" id="ford"> <label for="ford">Ford</label></li>
-                    <li><input type="checkbox" id="vinfast"> <label for="vinfast">VinFast</label></li>
-                    <li><input type="checkbox" id="mitsubishi"> <label for="mitsubishi">Mitsubishi</label></li>
-                    <li><input type="checkbox" id="suzuki"> <label for="suzuki">Suzuki</label></li>
-                    <li><input type="checkbox" id="nissan"> <label for="nissan">Nissan</label></li>
-                    <li><input type="checkbox" id="mercedes"> <label for="mercedes">Mercedes-Benz</label></li>
-                    <li><input type="checkbox" id="bmw"> <label for="bmw">BMW</label></li>
-                    <li><input type="checkbox" id="audi"> <label for="audi">Audi</label></li>
-                    <li><input type="checkbox" id="lexus"> <label for="lexus">Lexus</label></li>
-                    <li><input type="checkbox" id="peugeot"> <label for="peugeot">Peugeot</label></li>
-                    <li><input type="checkbox" id="other-brand"> <label for="other-brand">Hãng khác</label></li>
-                </ul>
-            </div>
+            <form id="filterForm" method="POST" onsubmit="return false;">
+                <h3>BỘ LỌC</h3>
 
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    ĐỊA ĐIỂM
-                    <i class="fas fa-chevron-down"></i>
-                </h4>
-                <ul>
-                    <li><input type="checkbox" id="hanoi"> <label for="hanoi">Hà Nội</label></li>
-                    <li><input type="checkbox" id="hcm"> <label for="hcm">TP. Hồ Chí Minh</label></li>
-                    <li><input type="checkbox" id="danang"> <label for="danang">Đà Nẵng</label></li>
-                    <li><input type="checkbox" id="cantho"> <label for="cantho">Cần Thơ</label></li>
-                </ul>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    GIÁ
-                    <i class="fas fa-chevron-down">
-                    </i>
-                </h4>
-                <div class="slider-container">
-                    <input id="priceRange" max="5000" min="50" oninput="updateValue('priceValue', this.value)" step="50"
-                        type="range" value="50" />
-                    <div class="slider-values">
-                        <span id="priceValue">
-                            50 triệu
-                        </span>
-                        <span>
-                            5 tỷ
-                        </span>
+                <div class="filter-section">
+                    <h4>HÃNG XE</h4>
+                    <select id="hang_xe" name="hang_xe" class="filter-select">
+                        <option value="">Tất cả hãng xe</option>
+                        <?php
+                        $sql_hang_xe = "SELECT * FROM hang_xe ORDER BY ten_hang_xe";
+                        $result_hang_xe = $conn->query($sql_hang_xe);
+                        while ($row_hang_xe = $result_hang_xe->fetch_assoc()) {
+                            echo '<option value="' . $row_hang_xe['id'] . '">' . $row_hang_xe['ten_hang_xe'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h4>GIÁ (TRIỆU ĐỒNG)</h4>
+                    <div class="price-inputs">
+                        <input type="number" name="gia_min" placeholder="Từ" min="0">
+                        <span>-</span>
+                        <input type="number" name="gia_max" placeholder="Đến" min="0">
                     </div>
                 </div>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    NĂM SẢN XUẤT
-                    <i class="fas fa-chevron-down">
-                    </i>
-                </h4>
-                <div class="slider-container">
-                    <input id="yearRange" max="2024" min="2000" oninput="updateValue('yearValue', this.value)" step="1"
-                        type="range" value="2000" />
-                    <div class="slider-values">
-                        <span id="yearValue">
-                            2000
-                        </span>
-                        <span>
-                            2024
-                        </span>
+
+                <div class="filter-section">
+                    <h4>NĂM SẢN XUẤT</h4>
+                    <div class="year-inputs">
+                        <input type="number" name="nam_san_xuat_min" placeholder="Từ" min="1900" max="2024">
+                        <span>-</span>
+                        <input type="number" name="nam_san_xuat_max" placeholder="Đến" min="1900" max="2024">
                     </div>
                 </div>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    SỐ KM
-                    <i class="fas fa-chevron-down">
-                    </i>
-                </h4>
-                <div class="slider-container">
-                    <input id="kmRange" max="500000" min="0" oninput="updateValue('kmValue', this.value)" step="1000"
-                        type="range" value="0" />
-                    <div class="slider-values">
-                        <span id="kmValue">
-                            0 km
-                        </span>
-                        <span>
-                            500000 km
-                        </span>
-                    </div>
+
+                <div class="filter-section">
+                    <h4>SỐ KM ĐÃ ĐI</h4>
+                    <input type="number" name="km_max" placeholder="Tối đa" min="0">
                 </div>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    KIỂU DÁNG
-                    <i class="fas fa-chevron-down"></i>
-                </h4>
-                <ul>
-                    <li><input type="checkbox" id="sedan"> <label for="sedan">Sedan</label></li>
-                    <li><input type="checkbox" id="suv"> <label for="suv">SUV</label></li>
-                    <li><input type="checkbox" id="hatchback"> <label for="hatchback">Hatchback</label></li>
-                    <li><input type="checkbox" id="mpv"> <label for="mpv">MPV</label></li>
-                </ul>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    NHIÊN LIỆU
-                    <i class="fas fa-chevron-down"></i>
-                </h4>
-                <ul>
-                    <li><input type="checkbox" id="petrol"> <label for="petrol">Xăng</label></li>
-                    <li><input type="checkbox" id="diesel"> <label for="diesel">Dầu</label></li>
-                    <li><input type="checkbox" id="hybrid"> <label for="hybrid">Hybrid</label></li>
-                    <li><input type="checkbox" id="electric"> <label for="electric">Điện</label></li>
-                </ul>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    HỘP SỐ
-                    <i class="fas fa-chevron-down"></i>
-                </h4>
-                <ul>
-                    <li><input type="checkbox" id="automatic"> <label for="automatic">Số tự động</label></li>
-                    <li><input type="checkbox" id="manual"> <label for="manual">Số sàn</label></li>
-                </ul>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    MÀU SẮC
-                    <i class="fas fa-chevron-down"></i>
-                </h4>
-                <ul>
-                    <li><input type="checkbox" id="white"> <label for="white">Trắng</label></li>
-                    <li><input type="checkbox" id="black"> <label for="black">Đen</label></li>
-                    <li><input type="checkbox" id="silver"> <label for="silver">Bạc</label></li>
-                    <li><input type="checkbox" id="red"> <label for="red">Đỏ</label></li>
-                    <li><input type="checkbox" id="blue"> <label for="blue">Xanh dương</label></li>
-                    <li><input type="checkbox" id="gray"> <label for="gray">Xám</label></li>
-                    <li><input type="checkbox" id="brown"> <label for="brown">Nâu</label></li>
-                    <li><input type="checkbox" id="other-color"> <label for="other-color">Màu khác</label></li>
-                </ul>
-            </div>
-            <div class="filter">
-                <h4 onclick="toggleDropdown(this)">
-                    SỐ CHỖ NGỒI
-                    <i class="fas fa-chevron-down"></i>
-                </h4>
-                <ul>
-                    <li><input type="checkbox" id="2seats"> <label for="2seats">2 chỗ</label></li>
-                    <li><input type="checkbox" id="4seats"> <label for="4seats">4 chỗ</label></li>
-                    <li><input type="checkbox" id="5seats"> <label for="5seats">5 chỗ</label></li>
-                    <li><input type="checkbox" id="7seats"> <label for="7seats">7 chỗ</label></li>
-                    <li><input type="checkbox" id="9seats"> <label for="9seats">9 chỗ</label></li>
-                    <li><input type="checkbox" id="over9seats"> <label for="over9seats">Trên 9 chỗ</label></li>
-                </ul>
-            </div>
+
+                <div class="filter-section">
+                    <h4>KIỂU DÁNG</h4>
+                    <select name="kieu_dang">
+                        <option value="">Tất cả</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="MPV">MPV</option>
+                        <option value="Crossover">Crossover</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h4>NHIÊN LIỆU</h4>
+                    <select name="nhien_lieu">
+                        <option value="">Tất cả</option>
+                        <option value="Xăng">Xăng</option>
+                        <option value="Dầu">Dầu</option>
+                        <option value="Điện">Điện</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h4>HỘP SỐ</h4>
+                    <select name="hop_so">
+                        <option value="">Tất cả</option>
+                        <option value="Số tự động">Số tự động</option>
+                        <option value="Số sàn">Số sàn</option>
+                        <option value="Số bán tự động">Số bán tự động</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h4>SỐ CHỖ NGỒI</h4>
+                    <select name="so_ghe_ngoi">
+                        <option value="">Tất cả</option>
+                        <option value="4">4 chỗ</option>
+                        <option value="5">5 chỗ</option>
+                        <option value="7">7 chỗ</option>
+                        <option value="9">9 chỗ</option>
+                    </select>
+                </div>
+
+                <div class="filter-buttons">
+                    <button type="button" class="btn-filter" onclick="filterCars(1)">
+                        <i class="fas fa-filter"></i> Lọc
+                    </button>
+                    <button type="button" class="btn-reset" onclick="resetFilter()">
+                        <i class="fas fa-redo"></i> Đặt lại
+                    </button>
+                </div>
+            </form>
         </div>
         <div class="content">
             <h2>
@@ -403,7 +338,7 @@ if (isset($_SESSION['success'])) {
             ul.style.display = ul.style.display === 'none' || ul.style.display === '' ? 'block' : 'none';
         }
     </script>
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
 </body>
 <footer class="footer">
     <div class="footer-content">

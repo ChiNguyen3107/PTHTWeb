@@ -91,33 +91,66 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Hiển thị kết quả
-if ($result->num_rows > 0) {
+if ($result->num_rows > 0 ) {
     while ($row = $result->fetch_assoc()) {
-        $images = explode(',', $row["all_images"]);
-        echo '<div class="listing">';
-        echo '<div class="image-container">';
-
-        foreach ($images as $index => $image) {
-            echo '<img src="uploads/' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' .
-                ($index == 0 ? 'class="active"' : '') . ' />';
+        if($row['thue_xe']==0)
+        {
+            $images = explode(',', $row["all_images"]);
+            echo '<div class="listing">';
+            echo '<div class="image-container">';
+    
+            foreach ($images as $index => $image) {
+                echo '<img src="uploads/' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' .
+                    ($index == 0 ? 'class="active"' : '') . ' />';
+            }
+    
+            echo '<button class="prev-btn">&#10094;</button>';
+            echo '<button class="next-btn">&#10095;</button>';
+            echo '</div>';
+    
+            echo '<div class="details">';
+            echo '<h3>' . $row["hang_xe"] . ' ' . $row["dong_xe"] . ' ' . $row["phien_ban"] . '</h3>';
+            echo '<div class="info-grid">';
+            echo '<div class="info-item"><i class="fas fa-calendar-alt"></i> ' . $row["nam_san_xuat"] . '</div>';
+            echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["odo"]) . ' km</div>';
+            echo '<div class="info-item"><i class="fas fa-gas-pump"></i> ' . $row["nhien_lieu"] . '</div>';
+            echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
+            echo '<div class="info-item"><i class="fas fa-users"></i> ' . $row["so_ghe_ngoi"] . ' chỗ</div>';
+            echo '</div>';
+            echo '<div class="price">' . number_format($row["gia"]) . ' VNĐ</div>';
+            echo '<a href="car_detail.php?id=' . $row['id'] . '">Xem chi tiết</a>'; // Thêm liên kết đến trang chi tiết
+            echo '</div>'; // .details
+            echo '</div>'; // .listing
         }
-
-        echo '<button class="prev-btn">&#10094;</button>';
-        echo '<button class="next-btn">&#10095;</button>';
-        echo '</div>';
-
-        echo '<div class="details">';
-        echo '<h3>' . $row["hang_xe"] . ' ' . $row["dong_xe"] . ' ' . $row["phien_ban"] . '</h3>';
-        echo '<div class="info-grid">';
-        echo '<div class="info-item"><i class="fas fa-calendar-alt"></i> ' . $row["nam_san_xuat"] . '</div>';
-        echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["odo"]) . ' km</div>';
-        echo '<div class="info-item"><i class="fas fa-gas-pump"></i> ' . $row["nhien_lieu"] . '</div>';
-        echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
-        echo '<div class="info-item"><i class="fas fa-users"></i> ' . $row["so_ghe_ngoi"] . ' chỗ</div>';
-        echo '</div>';
-        echo '<div class="price">' . number_format($row["gia"]) . ' VNĐ</div>';
-        echo '</div>'; // .details
-        echo '</div>'; // .listing
+        elseif($row['thue_xe']==1)
+        {
+            $images = explode(',', $row["all_images"]);
+            echo '<div class="listing">';
+            echo '<div class="image-container">';
+    
+            foreach ($images as $index => $image) {
+                echo '<img src="../uploads/' . $image . '" alt="' . $row["hang_xe"] . ' ' . $row["dong_xe"] . '" ' .
+                    ($index == 0 ? 'class="active"' : '') . ' />';
+            }
+    
+            echo '<button class="prev-btn">&#10094;</button>';
+            echo '<button class="next-btn">&#10095;</button>';
+            echo '</div>';
+    
+            echo '<div class="details">';
+            echo '<h3>' . $row["hang_xe"] . ' ' . $row["dong_xe"] . ' ' . $row["phien_ban"] . '</h3>';
+            echo '<div class="info-grid">';
+            echo '<div class="info-item"><i class="fas fa-calendar-alt"></i> ' . $row["nam_san_xuat"] . '</div>';
+            echo '<div class="info-item"><i class="fas fa-tachometer-alt"></i> ' . number_format($row["odo"]) . ' km</div>';
+            echo '<div class="info-item"><i class="fas fa-gas-pump"></i> ' . $row["nhien_lieu"] . '</div>';
+            echo '<div class="info-item"><i class="fas fa-cogs"></i> ' . $row["hop_so"] . '</div>';
+            echo '<div class="info-item"><i class="fas fa-users"></i> ' . $row["so_ghe_ngoi"] . ' chỗ</div>';
+            echo '</div>';
+            echo '<div class="price">' . number_format($row["gia"]) . ' VNĐ</div>';
+            echo '<a href="../ThueXe/Thuexe_car_detail.php?id=' . $row['id'] . '">Xem chi tiết</a>'; // Thêm liên kết đến trang chi tiết
+            echo '</div>'; // .details
+            echo '</div>'; // .listing
+        }
     }
 } else {
     echo '<p>Không có kết quả nào phù hợp.</p>';

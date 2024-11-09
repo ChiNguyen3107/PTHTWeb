@@ -4,6 +4,17 @@ session_start();
 require_once __DIR__ . '/../config.php';
 
 $is_logged_in = isset($_SESSION['user_id']);
+// Nếu đã đăng nhập, lấy thông tin người dùng
+if ($is_logged_in) {
+    $user_id = $_SESSION['user_id'];
+    $stmt = $conn->prepare("SELECT ho_ten FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $user_name = $user['ho_ten'];
+}
+
 // Lấy ID xe từ URL
 if (isset($_GET['id'])) {
     $xe_id = $_GET['id'];
@@ -44,18 +55,28 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi Tiết Xe - <?php echo $car['ten_hang_xe'] . ' ' . $car['ten_dong_xe']; ?></title>
+    <title>Chi Tiết Xe -
+        <?php echo $car['ten_hang_xe'] . ' ' . $car['ten_dong_xe']; ?>
+    </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="Css/_detail_car.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function changeMainImage(src) {
+            document.getElementById('mainImage').src = src;
+        }
+    </script>
 </head>
 
 <body>
     <div class="header">
         <div class="logo">
-            <a href="homepage.php" title="CaR88 Vietnam">
+            <a href="../homepage.php" title="CaR88 Vietnam">
                 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="40" viewBox="0 0 150 40">
                     <rect x="0" y="0" width="150" height="40" rx="5" ry="5" fill="#ff7f00" />
                     <text x="10" y="28" font-family="Arial, sans-serif" font-size="22" font-weight="bold"
@@ -71,6 +92,9 @@ if (isset($_GET['id'])) {
             </a>
             <a href="#">
                 Bán xe
+            </a>
+            <a href="../ThueXe/ThueXe.php">
+                Thuê xe
             </a>
             <a href="#">
                 Giới thiệu
@@ -97,7 +121,9 @@ if (isset($_GET['id'])) {
                 <div class="account-dropdown">
                     <button class="account-btn">
                         <i class="fas fa-user"></i>
-                        <span><?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?></span>
+                        <span>
+                            <?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?>
+                        </span>
                     </button>
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])): ?>
@@ -115,101 +141,187 @@ if (isset($_GET['id'])) {
         </div>
     </div>
 
-    <div class="car-detail">
-        <div class="car-images">
-            <?php if (!empty($images)): ?>
-                <img id="main-image" src="../uploads/<?php echo $images[0]; ?>" alt="Ảnh xe lớn">
-                <div class="thumbnails">
-                    <?php foreach ($images as $image): ?>
-                        <img src="../uploads/<?php echo $image; ?>"
-                            onclick="document.getElementById('main-image').src = '../uploads/<?php echo $image; ?>'">
-                    <?php endforeach; ?>
+    <div class="container my-5">
+        <div class="row">
+            <!-- Gallery Section -->
+            <div class="col-lg-7">
+                <div class="col_left">
+                    <div class="car-gallery">
+                        <?php if (!empty($images)): ?>
+                            <img id="mainImage" src="../uploads/<?php echo $images[0]; ?>" class="main-image"
+                                alt="<?php echo $car['ten_hang_xe']; ?>">
+                            <div class="thumbnail-container">
+                                <?php foreach ($images as $index => $image): ?>
+                                    <img src="../uploads/<?php echo $image; ?>" class="thumbnail"
+                                        onclick="changeMainImage('../uploads/<?php echo $image; ?>')"
+                                        alt="Thumbnail <?php echo $index + 1; ?>">
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-info">Không có ảnh nào cho xe này.</div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="card car-info-card">
+                        <div class="card-body">
+                            <h2 class="card-title mb-3">
+                                <?php echo $car['ten_hang_xe'] . ' ' . $car['ten_dong_xe']; ?>
+                                <p class="price mb-4">
+                                    <i class="fas fa-tag"></i>
+                                    <?php echo number_format($car['gia'], 0, ',', '.'); ?> VND
+                                </p>
+                            </h2>
+
+                            <div class="card car-des">
+                                <div class="card-body">
+                                    <h3 class="card-title mb-4">
+                                        <i class="fas fa-info-circle"></i> Mô tả
+                                    </h3>
+                                    <p class="card-text">
+                                        <?php echo nl2br($car['mo_ta']); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            <?php else: ?>
-                <p>Không có ảnh nào cho xe này.</p>
-            <?php endif; ?>
+            </div>
+            <!-- Car Info Section -->
+            <div class="col-lg-5 car_info">
+                <div class="card servic_info">
+                    <div class="rental_card">
+                        <h2>GIAO XE</h2>
+                        <hr>
+                        <label>
+                            <input type="checkbox"> Giao xe tại đại lý
+                        </label>
+                    </div>
+                    <div class="rental_card">
+                        <h2>THỜI GIAN THUÊ</h2>
+                        <hr>
+                        <div class="date-container">
+                            <div>
+                                <label for="pickup-date">Ngày nhận xe</label>
+                                <div class="input-container">
+                                    <input type="text" id="pickup-date" value="10/11/2024 07:00" readonly>
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="return-date">Ngày trả xe</label>
+                                <div class="input-container">
+                                    <input type="text" id="return-date" value="10/11/2024 19:00" readonly>
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rental_card">
+                        <h2>Thủ tục cần có</h2>
+                        <hr>
+                        <p>CCCD</p>
+                        <p>Bằng lái xe</p>
+                    </div>
+
+                    <div class="rental_card">
+                        <h2>Giới hạn quãng đường</h2>
+                        <hr>
+                        <p>2000 Km (Nếu vượt qua phụ thu 5000 VND/Km)</p>
+                        <h2>Giới hạn thời gian</h2>
+                        <hr>
+                        <p>Ghi trên hợp đồng (Nếu vượt qua phụ thu 5000 VND/h)</p>
+                    </div>
+                    <div class="rental_card ">
+                        <div class="order_card">
+                            <a href="tel:0835886837" class="btn btn-primary">
+                                <i class="fas fa-phone"></i> Gọi chủ xe
+                            </a>
+                            <a href="Order_Form.php?id=<?php echo $car['id']; ?>" class="btn btn-outline-primary ">
+                                Đặt xe
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
         </div>
 
-        <div class="car-info">
-            <h1><?php echo $car['ten_hang_xe'] . ' ' . $car['ten_dong_xe']; ?></h1>
-            <h2><i class="fas fa-tag"></i> <?php echo number_format($car['gia'], 0, ',', '.'); ?> VND</h2>
-
-            <table>
-                <tr>
-                    <td>Năm sản xuất</td>
-                    <td><?php echo $car['nam_san_xuat']; ?></td>
-                </tr>
-                <tr>
-                    <td>Nhiên liệu</td>
-                    <td><?php echo $car['nhien_lieu']; ?></td>
-                </tr>
-                <tr>
-                    <td>Số KM</td>
-                    <td><?php echo number_format($car['odo'], 0, ',', '.'); ?> km</td>
-                </tr>
-                <tr>
-                    <td>Số chỗ ngồi</td>
-                    <td><?php echo $car['so_ghe_ngoi']; ?></td>
-                </tr>
-                <tr>
-                    <td>Hộp số</td>
-                    <td><?php echo $car['hop_so']; ?></td>
-                </tr>
-                <tr>
-                    <td>Kiểu dáng</td>
-                    <td><?php echo $car['kieu_dang']; ?></td>
-                </tr>
-                <tr>
-                    <td>Xuất xứ</td>
-                    <td><?php echo $car['xuat_xu']; ?></td>
-                </tr>
-            </table>
-
-            <a href="tel:0835886837" class="button">Gọi người thuê</a>
-            <a href="Order_Form.php?id=<?php echo $car['id']; ?>" class="button">Đặt thuê</a>
+        <!-- Technical Specs & Description -->
+        <div class="row mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">
+                        <i class="fas fa-cogs"></i> Thông số kỹ thuật
+                    </h3>
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th scope="row"><i class="fas fa-car"></i> Hãng xe</th>
+                                <td>
+                                    <?php echo $car['ten_hang_xe']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-car-side"></i> Dòng xe</th>
+                                <td>
+                                    <?php echo $car['ten_dong_xe']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-code-branch"></i> Phiên bản</th>
+                                <td>
+                                    <?php echo $car['phien_ban']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-calendar-alt"></i> Năm sản xuất</th>
+                                <td>
+                                    <?php echo $car['nam_san_xuat']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-car-alt"></i> Kiểu dáng</th>
+                                <td>
+                                    <?php echo $car['kieu_dang']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-globe-americas"></i> Xuất xứ</th>
+                                <td>
+                                    <?php echo $car['xuat_xu']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-users"></i> Số ghế ngồi</th>
+                                <td>
+                                    <?php echo $car['so_ghe_ngoi']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-tachometer-alt"></i> Số KM đã đi</th>
+                                <td>
+                                    <?php echo number_format($car['odo'], 0, ',', '.'); ?> km
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-gas-pump"></i> Nhiên liệu</th>
+                                <td>
+                                    <?php echo $car['nhien_lieu']; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><i class="fas fa-cog"></i> Hộp số</th>
+                                <td>
+                                    <?php echo $car['hop_so']; ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="car-container">
-        <div class="car-details">
-            <h3><i class="fas fa-cogs"></i> Thông số kỹ thuật</h3>
-            <table>
-                <tr>
-                    <th>Hãng xe</th>
-                    <td><?php echo $car['ten_hang_xe']; ?></td>
-                </tr>
-                <tr>
-                    <th>Dòng xe</th>
-                    <td><?php echo $car['ten_dong_xe']; ?></td>
-                </tr>
-                <tr>
-                    <th>Phiên bản</th>
-                    <td><?php echo $car['phien_ban']; ?></td>
-                </tr>
-                <tr>
-                    <th>Năm sản xuất</th>
-                    <td><?php echo $car['nam_san_xuat']; ?></td>
-                </tr>
-                <tr>
-                    <th>Kiểu dáng</th>
-                    <td><?php echo $car['kieu_dang']; ?></td>
-                </tr>
-                <tr>
-                    <th>Xuất xứ</th>
-                    <td><?php echo $car['xuat_xu']; ?></td>
-                </tr>
-                <tr>
-                    <th>Số ghế ngồi</th>
-                    <td><?php echo $car['so_ghe_ngoi']; ?></td>
-                </tr>
-            </table>
-        </div>
-        <div class="car-description">
-            <h3><i class="fas fa-info-circle"></i> Mô tả</h3>
-            <p><?php echo nl2br($car['mo_ta']); ?></p>
-        </div>
-    </div>
-
-
 </body>
 <footer class="footer">
     <div class="footer-content">

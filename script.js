@@ -44,7 +44,7 @@ function toggleDropdown(element) {
 
 let isFiltering = false;
 
-function filterCars() {
+function filterCars(id) {
     if (isFiltering) return;
     isFiltering = true;
 
@@ -59,21 +59,39 @@ function filterCars() {
 
     // Lấy tất cả dữ liệu từ form
     const formData = new FormData(document.getElementById('filterForm'));
-
-    // Gửi request Ajax
-    fetch('filter_ajax.php', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.text())
-        .then(data => {
-            // Cập nhật phần hiển thị kết quả
-            document.querySelector('.listings').innerHTML = data;
+    if (id === 0) {
+        // Gửi request Ajax
+        fetch('filter_ajax.php', {
+            method: 'POST',
+            body: formData
         })
-        .catch(error => console.error('Error:', error))
-        .finally(() => {
-            isFiltering = false; // Reset trạng thái lọc
-        });
+            .then(response => response.text())
+            .then(data => {
+                // Cập nhật phần hiển thị kết quả
+                document.querySelector('.listings').innerHTML = data;
+            })
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                isFiltering = false; // Reset trạng thái lọc
+            });
+    }
+    else {
+        // Gửi request Ajax
+        fetch('../filter_ajax.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                // Cập nhật phần hiển thị kết quả
+                document.querySelector('.listings').innerHTML = data;
+            })
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                isFiltering = false; // Reset trạng thái lọc
+            });
+    }
+
 }
 
 function resetFilter() {

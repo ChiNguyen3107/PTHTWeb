@@ -33,14 +33,14 @@
 }
 .main .left ul li i {
     margin-right: 10px;
-    color: #FF9000;
+    color: #0B5ED7;
 }
 .main .left .price {
     margin-top: 20px;
 }
 .main .left .price p {
     margin: 5px 0;
-    color: #FF9000;
+    color: #0B5ED7;
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
 }
@@ -79,12 +79,12 @@
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #FF9000;
+    background-color: #0B5ED7;
     color: #fff;
     cursor: pointer;
 }
 .main .right form .buttons button:hover {
-    background-color: #FFB555;
+    background-color: #ADC9F1;
 }
 .price_order {
     font-family: Arial, sans-serif;
@@ -117,7 +117,7 @@
 .price_order .container p {
     font-size: 14px;
     font-weight: bold;
-    color: #e66f00;
+    color: #0B5ED7;
     margin: 5px 0;
     display: flex;
     justify-content: space-between;

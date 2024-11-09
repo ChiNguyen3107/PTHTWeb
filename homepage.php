@@ -182,7 +182,7 @@ if (isset($_SESSION['success'])) {
                 </div>
 
                 <div class="filter-buttons">
-                    <button type="button" class="btn-filter" onclick="filterCars()">
+                    <button type="button" class="btn-filter" onclick="filterCars(0)">
                         <i class="fas fa-filter"></i> Lọc
                     </button>
                     <button type="button" class="btn-reset" onclick="resetFilter()">

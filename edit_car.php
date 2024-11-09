@@ -243,7 +243,7 @@ $hang_xe_list = $conn->query("SELECT * FROM hang_xe");
                         <input type="number" name="gia" id="gia" class="form-control" value="<?= $car['gia'] ?>"
                             required>
                     </div>
-                    <div ```php <div class="mb-3">
+                    <div class="mb-3">
                         <label for="mo_ta" class="form-label">Mô tả:</label>
                         <textarea name="mo_ta" id="mo_ta" class="form-control" required><?= $car['mo_ta'] ?></textarea>
                     </div>
