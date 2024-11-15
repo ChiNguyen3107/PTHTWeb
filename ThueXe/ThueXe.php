@@ -472,7 +472,6 @@ if (isset($_SESSION['success'])) {
         &copy; 2023 CaR88.com | Thiết kế bởi Nhóm 9
     </div>
 </footer>
-
 </html>
 <?php
 $conn->close();
