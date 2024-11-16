@@ -62,6 +62,7 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="Css/Order.css">
     <script src="script.js"></script>
+
 </head>
 
 <body>
@@ -112,7 +113,9 @@ if (isset($_GET['id'])) {
                 <div class="account-dropdown">
                     <button class="account-btn">
                         <i class="fas fa-user"></i>
-                        <span><?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?></span>
+                        <span>
+                            <?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?>
+                        </span>
                     </button>
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])): ?>
@@ -132,70 +135,119 @@ if (isset($_GET['id'])) {
     <div class="main">
         <div class="left">
             <img alt="Toyota Vios MT" height="200" src="../uploads/<?php echo $images[0]; ?>" width="300" />
-            <h2>
-                <?php echo $car['ten_hang_xe'] . ' ' . $car['ten_dong_xe']; ?>
-            </h2>
-            <ul>
-                <li>
-                    <i class="fas fa-gas-pump"></i>
-                    <span><?php echo $car['nhien_lieu']; ?></span>
-                </li>
-                <!--<li>
+            <div class="left-content">
+                <h2>
+                    <?php echo $car['ten_hang_xe'] . ' ' . $car['ten_dong_xe']; ?>
+                </h2>
+                <ul class="two-columns-flex">
+                    <li>
+                        <i class="fas fa-gas-pump"></i>
+                        <span>
+                            <?php echo $car['nhien_lieu']; ?>
+                        </span>
+                    </li>
+                    <!--<li>
                     <i class="fas fa-car" style="color: #FF9000;"></i>
                     <span>1.5L</span>
                 </li>*/-->
-                <li>
-                    <i class="fas fa-cogs"></i>
-                    <span>Số sàn</span>
-                </li>
-                <li>
-                    <i class="fas fa-calendar-alt"></i>
-                    <span><?php echo $car['nam_san_xuat']; ?></span>
-                </li>
-                <li>
-                    <i class="fas fa-road"></i>
-                    <span><?php echo $car['odo']; ?> Km</span>
-                </li>
-            </ul>
+                    <li>
+                        <i class="fas fa-cogs"></i>
+                        <span>Số sàn</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>
+                            <?php echo $car['nam_san_xuat']; ?>
+                        </span>
+                    </li>
+                    <li>
+                        <i class="fas fa-road"></i>
+                        <span>
+                            <?php echo $car['odo']; ?> Km
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h2>Thời gian thuê</h2>
+                <h4>
+                    <?php $pickdate = $_GET['pickdate'];
+                    $formattedPickDate = date("d/m/Y H:i", strtotime($pickdate));
+                    echo $formattedPickDate . ' ->'; ?>
+                    <?php $returndate = $_GET['returndate'];
+                    $formattedReturnDate = date("d/m/Y H:i", strtotime($returndate));
+                    echo $formattedReturnDate; ?>
+                </h4>
+
+            </div>
             <div class="price_order">
+
                 <div class="container">
                     <h2>CHI TIẾT GIÁ</h2>
                     <hr>
-                    <p>Đơn giá <span><?php echo  number_format($car['gia']) ?></span></p>
-                    <p>Thời gian thuê <span id="dayInput"> <?php
-                                                            $day = $_GET['day'];  // Nhận giá trị số ngày
-
-                                                            echo  $day . ' ngày'; ?></span></p>
+                    <p>Đơn giá <span>
+                            <?php echo number_format($car['gia']) ?>
+                        </span></p>
+                    <p>Thời gian thuê <span id="dayInput">
+                            <?php
+                            $day = $_GET['day']; // Nhận giá trị số ngày
+                            
+                            echo $day . ' ngày'; ?>
+                        </span></p>
                     <hr>
-                    <p>Giá cơ bản <span><?php
-                                        $day = $_GET['day'];  // Nhận giá trị số ngày
-
-                                        echo  number_format($day * (float)$car['gia']); ?></span></p>
-                    <p>Dịch vụ tùy chọn</p>
+                    <p>Giá cơ bản <span>
+                            <?php
+                            $day = $_GET['day']; // Nhận giá trị số ngày
+                            
+                            echo number_format($day * (float) $car['gia']); ?>
+                        </span></p>
                     <hr>
-                    <p>Tổng <span><?php
-                                    $day = $_GET['day'];  // Nhận giá trị số ngày
-
-                                    echo  number_format($day * (float)$car['gia']); ?></span></p>
+                    <p>Tổng <span>
+                            <?php
+                            $day = $_GET['day']; // Nhận giá trị số ngày
+                            
+                            echo  number_format($day * (float) $car['gia']); 
+                            $Base_price = $day * (float) $car['gia'] ?>
+                        </span></p>
+                    <p> Cọc<span id="result">
+                        </span></p>
                 </div>
             </div>
         </div>
+ 
         <div class="right">
             <h3>THÔNG TIN KHÁCH HÀNG</h3>
             <form action="contract.php" method="POST">
+                <input type="hidden" name="pickdate" value="<?php $pickdate = $_GET['pickdate'];
+                $formattedPickDate = date("Y-m-d H:i:s", strtotime($pickdate));
+                echo $formattedPickDate . ' ->'; ?>">
+                <input type="hidden" name="returndate" value="<?php $returndate = $_GET['returndate'];
+                $formattedReturnDate = date("Y-m-d H:i:s", strtotime($returndate));
+                echo $formattedReturnDate; ?>">
                 <input type="hidden" name="id" value="<?php echo $xe_id; ?>">
                 <input type="hidden" name="day" value="<?php echo $day; ?>">
+                <input name="CCCD" placeholder="Nhập CCCD" type="text" required />
+                <input name="GPLX" placeholder="Nhập số giấy phép lái xe" type="text" required />
                 <input name="ho_ten" placeholder="Nhập họ tên" type="text" required />
                 <input name="so_dien_thoai" placeholder="Nhập số điện thoại" type="text" required />
+                <input name="dia_chi" placeholder="Nhập địa chỉ" type="text" required />
+
                 <input name="email" placeholder="Nhập email" type="email" required />
                 <textarea name="ghi_chu" placeholder="Ghi chú của khách hàng"></textarea>
+
                 <div class="payment-method">
-                    <label>
-                        <input name="payment" type="radio" value="prepay" /> Trả trước
-                    </label>
-                    <label>
-                        <input name="payment" type="radio" value="postpay" checked /> Trả sau
-                    </label>
+                    <div class="radio-div" onclick="getPaymentType(<?php $day = $_GET['day']; echo number_format($day * (float) $car['gia'])  ?>)">
+                        <label>
+                            <input name="payment_1" type="radio" value="prepay" /> Trả trước
+                        </label>
+                    </div>
+                    <div class="radio-div" onclick="getPaymentType(<?php echo $Base_price ?>)">
+                        <label>
+                            <input name="payment_1" type="radio" value="postpay" /> Trả sau (Cọc giữ xe 30%)
+                        </label>
+                    </div>
+                </div>
+                <div class="payment-method">
                     <label>
                         <input name="payment" type="radio" value="atm" /> Thẻ ATM nội địa
                     </label>
@@ -212,7 +264,6 @@ if (isset($_GET['id'])) {
                         <input name="payment" type="radio" value="later" /> Thanh toán sau
                     </label>
                 </div>
-                <input name="ma_giam_gia" placeholder="Nhập mã giảm giá" type="text" />
                 <div class="buttons">
                     <button type="submit">Hoàn tất đặt xe</a></button>
                     <button type="button" onclick="window.history.back()">Quay lại</button>
@@ -221,6 +272,26 @@ if (isset($_GET['id'])) {
         </div>
 
     </div>
+    <script>
+        // Hàm trả về giá trị của phương thức thanh toán
+        function getPaymentType(Base_price) {
+            // Lấy giá trị đã chọn từ radio button
+            var paymentType = document.querySelector('input[name="payment_1"]:checked')?.value;
+
+            // Kiểm tra giá trị và hiển thị kết quả
+            if (paymentType == "postpay") {
+                var result = Base_price * 0.3;  // 30% của Base_price
+                var formattedResult = result.toLocaleString()
+                document.getElementById("result").textContent = "" + formattedResult;
+                return formattedResult;
+
+            } else {
+                document.getElementById("result").textContent = "Không cần cọc";
+                return null;  // Nếu không có lựa chọn
+            }
+        }
+    </script>
+
 
 </body>
 <footer class="footer">

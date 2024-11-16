@@ -101,10 +101,6 @@ $result = $conn->query($sql);
                                     <a href="edit_car.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i> Sửa
                                     </a>
-                                    <a href="manage_cars.php?delete=<?= $row['id'] ?>" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa xe này?');">
-                                        <i class="fas fa-trash-alt"></i> Xóa
-                                    </a>
                                 </td>
                             </tr>
                             <?php

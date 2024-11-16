@@ -137,3 +137,26 @@
     border-top: 1px solid #e9ecef;
     margin: 10px 0;
 }
+.two-columns-flex {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép nội dung xuống dòng */
+    list-style: none; /* Bỏ bullet point */
+    padding: 0; /* Xóa khoảng cách bên trong */
+    margin: 0; /* Xóa khoảng cách bên ngoài */
+}
+.two-columns-flex li {
+    flex: 1 0 50%; /* Chia mỗi mục chiếm 50% chiều rộng */
+    margin-bottom: 10px; /* Khoảng cách giữa các mục */
+}
+.payment-method{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+
+    display: flex;
+    align-items: start;
+    margin-bottom: 10px;
+}
+

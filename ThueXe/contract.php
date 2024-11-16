@@ -21,21 +21,64 @@ if (isset($_SESSION['success'])) {
     echo "<p class='success'>{$_SESSION['success']}</p>";
     unset($_SESSION['success']);
 }
+$sql_DH = "SELECT MAX(DH_MADON) AS max_order_id
+FROM don_hang;
+";
+$result = $conn->query($sql_DH);
+if ($result->num_rows > 0) {
+    $row_DH = $result->fetch_assoc();
+}
+$id_DH = $row_DH['max_order_id'] + 1;
 
 // Kiểm tra và lấy thông tin từ form
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $pickdate = $_POST['pickdate'];
+    $returndate = $_POST['returndate'];
     $xe_id = $_POST['id'];
     $day = isset($_POST['day']) ? $_POST['day'] : 1;
+    $cccd = $_POST['CCCD'];
+    $gplx = $_POST['GPLX'];
     $ho_ten = $_POST['ho_ten'];
     $so_dien_thoai = $_POST['so_dien_thoai'];
+    $diachi = $_POST['dia_chi'];
     $email = $_POST['email'];
     $ghi_chu = $_POST['ghi_chu'];
-    $payment_method = $_POST['payment'];
-    $ma_giam_gia = $_POST['ma_giam_gia'];
-
-    // Xử lý logic và lưu thông tin hợp đồng nếu cần
-    // Ví dụ: lưu thông tin vào cơ sở dữ liệu, tính giá tiền, áp dụng mã giảm giá, v.v.
+    $payment = $_POST['payment_1'];
+    $payment_method = $_POST['payment']; // Xử lý logic và lưu thông tin hợp đồng nếu cầ   // Ví dụ: lưu thông tin vào cơ sở dữ liệu, tính giá tiền, áp dụng mã giảm giá, v.v.
 }
+
+// Kiểm tra nếu các giá trị không rỗng
+if (!empty($pickdate) && !empty($returndate) && !empty($xe_id)) {
+    // Chuẩn bị câu lệnh SQL với các tham số
+    $sql_tt = "INSERT INTO trang_thai (XE_ID, TT_NGAYBD,TT_NGAYKT, TT_TRANGTHAI) VALUES (?, ?, ?, 'Đang thuê')";
+
+    // Sử dụng prepared statement
+    $stmt_att = $conn->prepare($sql_tt);
+
+    // Kiểm tra nếu prepared statement thành công
+    if ($stmt_att === false) {
+        // Nếu không thành công, in ra lỗi
+        echo "Error: " . $conn->error;
+    } else {
+        // Gắn giá trị vào các tham số trong câu lệnh SQL
+        $stmt_att->bind_param("iss", $xe_id, $pickdate, $returndate);
+
+        // Thực thi câu lệnh
+        if ($stmt_att->execute()) {
+            // Kiểm tra nếu câu lệnh thực thi thành công
+            echo "Cập nhật trạng thái thành công!";
+        } else {
+            // Nếu không thực thi được, hiển thị lỗi
+            echo "Lỗi khi thực hiện câu lệnh SQL: " . $stmt_att->error;
+        }
+
+        // Đóng statement sau khi thực thi
+        $stmt_att->close();
+    }
+} else {
+    echo "Dữ liệu không hợp lệ!";
+}
+
 if (!empty($xe_id)) {
     // Truy vấn thông tin xe
     $sql = "SELECT xe.*, hang_xe.ten_hang_xe, dong_xe.ten_dong_xe 
@@ -63,6 +106,54 @@ if (!empty($xe_id)) {
     echo "Không có ID xe!";
     exit();
 }
+
+$ngay_gio_hom_nay = date('Y-m-d H:i:s');
+
+// Kiểm tra thông tin khách hàng không rỗng
+if (!empty($cccd) && !empty($gplx) && !empty($ho_ten) && !empty($so_dien_thoai) && !empty($diachi) && !empty($email)) {
+
+    // Thêm khách hàng vào bảng KHACH
+    $sql_kh = $conn->prepare("INSERT INTO KHACH (KH_CCCD, KH_HOTEN, KH_GPLX, KH_DIACHI, KH_SDT, KH_EMAIL) 
+                              VALUES (?, ?, ?, ?, ?, ?)");
+
+    $sql_kh->bind_param("ssssss", $cccd, $ho_ten, $gplx, $diachi, $so_dien_thoai, $email);
+
+    if ($sql_kh->execute()) {
+        // Kiểm tra nếu câu lệnh INSERT khách hàng thành công
+
+
+        // Kiểm tra thông tin đơn hàng
+        if (!empty($xe_id) && !empty($id_DH) && !empty($day) && !empty($pickdate) && !empty($returndate)) {
+
+            // Tính toán tổng tiền và tiền cọc
+            $tongtien = $day * $car['gia'];
+            $coc = $tongtien * 0.3;
+
+            // Thêm đơn hàng vào bảng DON_HANG
+            $sql_dh = $conn->prepare("INSERT INTO DON_HANG (KH_CCCD, XE_ID, DH_MADON, DH_NGAYLAP, DH_SONGAYTHUE, DH_NGAYBD, DH_NGAYKT, DH_TONGTIEN, DH_TIENCOC)
+                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+            $sql_dh->bind_param("siissssii", $cccd, $xe_id, $id_DH, $ngay_gio_hom_nay, $day, $pickdate, $returndate, $tongtien, $coc);
+
+            if ($sql_dh->execute()) {
+               
+            } else {
+                echo "Lỗi tạo đơn hàng: " . $sql_dh->error;
+            }
+        } else {
+            echo "Thông tin đơn hàng không đầy đủ!";
+        }
+    } else {
+        // Nếu câu lệnh INSERT khách hàng không thành công
+        echo "Có lỗi khi thêm khách hàng: " . $sql_kh->error;
+    }
+
+} else {
+    // Nếu thông tin khách hàng không đầy đủ
+    echo "Không đủ tham số khách hàng!";
+}
+
+
 ?>
 <html>
 
@@ -72,8 +163,9 @@ if (!empty($xe_id)) {
     </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="Css/Order.css">
     <script src="script.js"></script>
 
 </head>
@@ -126,7 +218,9 @@ if (!empty($xe_id)) {
                 <div class="account-dropdown">
                     <button class="account-btn">
                         <i class="fas fa-user"></i>
-                        <span><?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?></span>
+                        <span>
+                            <?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?>
+                        </span>
                     </button>
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])): ?>
@@ -143,329 +237,181 @@ if (!empty($xe_id)) {
             </div>
         </div>
     </div>
-    <div class="contract">
-        <h2>Hợp Đồng Thuê Xe</h2>
-        <!-- Thông tin xe -->
-        <div class="contract-section">
-            <h3>Thông Tin Xe</h3>
-            <div class="contract-info">
-                <div class="info-item">
-                    <span class="info-title">Hãng xe: </span>
-                    <span class="info-value"><?php echo $car['ten_hang_xe']; ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Dòng xe: </span>
-                    <span class="info-value"><?php echo $car['ten_dong_xe']; ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Biển số: </span>
-                    <span class="info-value"><?php echo $car['bien_so']; ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Năm sản xuất: </span>
-                    <span class="info-value"><?php echo $car['nam_san_xuat']; ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Số km đã đi: </span>
-                    <span class="info-value"><?php echo $car['odo']; ?> Km</span>
-                </div>
-            </div>
+
+
+    <div class="container_order ">
+        <div class="image">
+            <img alt="Toyota Vios MT" height="200" src="../uploads/<?php echo $images[0]; ?>" width="300" />
         </div>
+        <div class="content">
+            <h1>
+                ĐẶT HÀNG THÀNH CÔNG
+            </h1>
+            <p>
+                Kính gửi Quý khách hàng
+                <span class="highlight">
+                    <?php echo $ho_ten ?>
+                </span>
+                ,
+            </p>
+            <p>
+                Cảm ơn Quý khách đã đặt thuê xe tại Car88.com. Chúng tôi xin thông báo đơn hàng đặt thuê xe của Quý
+                khách:
+            </p>
 
-        <!-- Thông tin khách hàng -->
-        <div class="contract-section">
-            <h3>Thông Tin Khách Hàng</h3>
-            <div class="contract-info">
-                <div class="info-item">
-                    <span class="info-title">Họ tên: </span>
-                    <span class="info-value"><?php echo htmlspecialchars($ho_ten); ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Email: </span>
-                    <span class="info-value"><?php echo htmlspecialchars($email); ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Số điện thoại: </span>
-                    <span class="info-value"><?php echo htmlspecialchars($so_dien_thoai); ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Ghi chú: </span>
-                    <span class="info-value"><?php echo htmlspecialchars($ghi_chu); ?></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Phương thức thanh toán -->
-        <div class="contract-section">
-            <h3>Phương Thức Thanh Toán</h3>
-            <div class="contract-info">
-                <div class="info-item">
-                    <span class="info-title">Phương thức thanh toán: </span>
-                    <span class="info-value">
-                        <?php
-                        switch ($payment_method) {
-                            case 'prepay':
-                                echo "Trả trước";
-                                break;
-                            case 'postpay':
-                                echo "Trả sau";
-                                break;
-                            case 'atm':
-                                echo "Thẻ ATM nội địa";
-                                break;
-                            case 'visa':
-                                echo "VISA/ Master Card (Thẻ phát hành tại Việt Nam)";
-                                break;
-                            case 'vnpay':
-                                echo "VNPAY";
-                                break;
-                            case 'bank':
-                                echo "Chuyển khoản ngân hàng";
-                                break;
-                            case 'later':
-                                echo "Thanh toán sau";
-                                break;
-                            default:
-                                echo "Không xác định";
-                        }
-                        ?>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Điều khoản hợp đồng -->
-
-        <div class="contract-section">
-            <h3>Điều Khoản Hợp Đồng</h3>
-            <div class="contract-info">
+            <p class="bold">
+                Đơn hàng:
+                <span class="highlight">
+                    <?php echo $id_DH ?>
+                </span>
+            </p>
+            <p class="bold">
+                Mẫu xe:
+                <?php echo $car['ten_hang_xe'] . ' ' . $car['ten_dong_xe'] . ' ' . $car['phien_ban']; ?>
+            </p>
+            <p class="bold">
+                Trạng thái đơn hàng:
+                <span class="status">
+                    Thành công
+                </span>
+            </p>
+            <p class="bold">
                 <?php
-                // Kiểm tra và nhận giá trị từ GET
-                // Mặc định là 1 ngày nếu không có giá trị
-                $basePrice = (float)$car['gia'];
-                $ma_giam_gia = isset($_GET['ma_giam_gia']) ? htmlspecialchars($_GET['ma_giam_gia']) : '';
-
-                // Tính giá cơ bản và tổng tiền
-                $gia_co_ban = $day * $basePrice;
-                $tong_tien = $gia_co_ban; // Thêm các dịch vụ tùy chọn nếu có
-                ?>
-
-                <div class="info-item">
-                    <span class="info-title">Đơn giá: </span>
-                    <span class="info-value"><?php echo number_format($basePrice); ?> đ/ngày</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Thời gian thuê: </span>
-                    <span class="info-value"><?php echo number_format($day) . ' ngày'; ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Giá cơ bản: </span>
-                    <span class="info-value"><?php echo number_format($gia_co_ban); ?> đ</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Dịch vụ tùy chọn: </span>
-                    <span class="info-value">Không có</span> <!-- Thay đổi tùy theo dịch vụ tùy chọn -->
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Mã giảm giá: </span>
-                    <span class="info-value"><?php echo $ma_giam_gia; ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-title">Tổng: </span>
-                    <span class="info-value"><?php echo number_format($tong_tien); ?> đ</span>
-                </div>
+                if ($payment == "postpay") {
+                    $coc = $day * $car['gia'] * 0.3;
+                } else {
+                    $coc = 0;
+                } ?>
+                Số tiền cọc:
+                <?php echo number_format($coc) ?> VND
+            </p>
+            <p class="bold">
+                <?php
+                if ($payment_method == "bank") {
+                    $p_method = "Chuyển khoản ngân hàng";
+                } else if ($payment_method == "atm") {
+                    $p_method = "Thẻ ATM nội địa";
+                } ?>
+                Phương thức thanh toán:
+                <?php echo $p_method ?>
+            </p>
+            <p>
+                Trân trọng!
+            </p>
+            <div class="homeback">
+                <a href="#">
+                    Trở về trang chủ
+                </a>
             </div>
         </div>
-        <div class="contract-section">
-            <h3>Chữ Ký</h3>
-            <div class="signature">
-                <!-- Khu vực Đại diện CaR88 -->
-                <div class="signature-item">
-                    <p><strong>Đại diện CaR88</strong></p>
-                    <!-- Thêm khoảng trống -->
-                    <p class="space"></p> <!-- Thêm khoảng trống -->
-                </div>
+    </div>
 
-                <!-- Khu vực Người thuê xe -->
-                <div class="signature-item">
-                    <p><strong>Người thuê xe</strong></p>
-                    <!-- Thêm khoảng trống -->
-                    <p class="space"></p> <!-- Thêm khoảng trống -->
-                </div>
-            </div>
-        </div>
-        <!-- Chữ ký -->
 
-        <a href="in.php?id=<?= $xe_id ?>&day=<?= $day ?>&ma_giam_gia=<?= $ma_giam_gia ?>&ho_ten=<?= urlencode($ho_ten) ?>&so_dien_thoai=<?= urlencode($so_dien_thoai) ?>&email=<?= urlencode($email) ?>&ghi_chu=<?= urlencode($ghi_chu) ?>&payment=<?= urlencode($payment_method) ?>" class="btn btn-print" target="_blank">
-            In hợp đồng
-        </a>
+    <!-- Chữ ký -->
 
-        <style>
-            .btn {
-                display: inline-block;
-                padding: 10px 20px;
-                font-size: 16px;
-                font-weight: bold;
-                text-align: center;
-                color: #fff;
-                background-color: #e67e22;
-                border: none;
-                border-radius: 5px;
-                text-decoration: none;
-                transition: all 0.3s ease;
-            }
+    <a href="in.php?id=<?= $xe_id ?>&day=<?= $day ?>&ma_giam_gia=<?= $ma_giam_gia ?>&ho_ten=<?= urlencode($ho_ten) ?>&so_dien_thoai=<?= urlencode($so_dien_thoai) ?>&email=<?= urlencode($email) ?>&ghi_chu=<?= urlencode($ghi_chu) ?>&payment=<?= urlencode($payment_method) ?>"
+        class="btn btn-print" target="_blank">
+        In hợp đồng
+    </a>
 
-            .btn:hover {
-                background-color: #d35400;
-                transform: translateY(-3px);
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            }
+    <style>
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            background-color: #e67e22;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
 
-            .btn:active {
-                background-color: #c0392b;
-                transform: translateY(0);
-                box-shadow: none;
-            }
+        .btn:hover {
+            background-color: #d35400;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-            .btn-print {
-                font-size: 18px;
-            }
+        .btn:active {
+            background-color: #c0392b;
+            transform: translateY(0);
+            box-shadow: none;
+        }
 
-            .btn-print:hover {
-                background-color: #e67e22;
-            }
+        .btn-print {
+            font-size: 18px;
+        }
 
-            .btn-print:active {
-                background-color: #c0392b;
-            }
-        </style>
+        .btn-print:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-print:active {
+            background-color: #c0392b;
+        }
+    </style>
 
 
 
 
-        <style>
-            /* Định dạng cho trang in */
-            body {
-                font-family: 'Arial', sans-serif;
-                line-height: 1.6;
-                color: #333;
-                margin: 0;
-                padding: 10px 30px 10px 30px;
-                background-color: #f4f4f4;
-            }
+    <style>
+        .container_order {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
 
-            .contract-print {
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 10px;
-                border: 1px solid #ddd;
-                background-color: #fff;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
+        }
 
-            h2 {
-                text-align: center;
-                color: #e67e22;
-                font-size: medium;
-                margin-bottom: 10px;
-            }
-
-            h3 {
-                color: #e67e22;
-                font-size: medium;
-                margin-bottom: 10px;
-                border-bottom: 1px solid #e67e22;
-                padding-bottom: 5px;
-            }
-
-            .contract-section {
-                margin-bottom: 10px;
-                display: inline;
-
-            }
+        .image {
+            margin-right: 50px;
+        }
 
 
 
-            .info-item {
-                margin-bottom: 12px;
-                font-size: 16px;
-            }
+        .container_order h1 {
+            color: #0056b3;
+            font-size: 24px;
+        }
 
-            .info-title {
-                font-weight: bold;
-                color: #333;
-            }
+        .container_order p {
+            margin: 15px 0;
+        }
 
-            .info-value {
-                color: #555;
-                font-style: italic;
-            }
+        .container_order .highlight {
+            color: red;
+        }
 
-            .contract-info {
-                margin-bottom: 10px;
-                display: inline;
-            }
+        .container_order .status {
+            color: green;
+        }
 
-            .signature {
-                display: flex;
-                justify-content: space-between;
-                padding-top: 30px;
-                padding-bottom: 30px;
-                width: 100%;
-                border-top: 2px solid #ddd;
-            }
+        .container_order .bold {
+            font-weight: bold;
+        }
 
-            .signature-item {
-                text-align: center;
-                width: 45%;
-            }
+        .container_order .homeback {
+            margin-top: 20px;
+        }
 
-            .signature-item p {
-                margin: 5px 0;
-                font-size: 16px;
-                color: #333;
-            }
-
-            .space {
-                height: 20px;
-            }
-
-            /* Style cho các phần giá và tổng tiền */
-            .price-section {
-                margin-top: 20px;
-                font-size: 18px;
-                color: #2c3e50;
-            }
-
-            .price-item {
-                margin-bottom: 10px;
-            }
-
-            .total-price {
-                font-weight: bold;
-                font-size: 20px;
-                color: #e67e22;
-            }
-
-            .contract-info .info-item {
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .contract-info .info-title {
-                width: 200px;
-            }
-
-            .contract-info .info-value {
-                flex-grow: 1;
-            }
-        </style>
+        .container_order .homeback a {
+            text-decoration: none;
+            color: #0056b3;
+            border: 1px solid #0056b3;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
 </body>
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-section about">
             <h3>Về CaR88</h3>
-            <p>CaR88 là nền tảng mua bán xe hơi trực tuyến hàng đầu tại Việt Nam. Chúng tôi cung cấp dịch vụ đáng tin cậy và thuận tiện cho người mua và bán xe.</p>
+            <p>CaR88 là nền tảng mua bán xe hơi trực tuyến hàng đầu tại Việt Nam. Chúng tôi cung cấp dịch vụ đáng tin
+                cậy và thuận tiện cho người mua và bán xe.</p>
             <div class="contact">
                 <span><i class="fas fa-phone"></i> &nbsp; 0835886837</span>
                 <span><i class="fas fa-envelope"></i> &nbsp; info@car88.com</span>

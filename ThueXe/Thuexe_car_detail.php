@@ -67,12 +67,12 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="Css/_detail_car.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Thêm jQuery -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Thêm jQuery UI -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
     <script>
         function changeMainImage(src) {
@@ -80,55 +80,83 @@ if (isset($_GET['id'])) {
         }
     </script>
     <script>
-        $(document).ready(function() {
-            // Khởi tạo datepicker
-            $("#pickup-date").datetimepicker({
-                dateFormat: "dd/mm/yy",
-                timeFormat: "HH:mm",
-                minDate: 0
-            });
-            $("#return-date").datetimepicker({
-                dateFormat: "dd/mm/yy",
-                timeFormat: "HH:mm",
-                minDate: 0
-            });
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentDate = new Date(); // Lấy ngày hiện tại (không có giờ)
 
-            // Bắt sự kiện click vào biểu tượng lịch
-            $(".input-container i").on("click", function() {
-                // Lấy id của input tương ứng
-                var inputId = $(this).siblings("input").attr("id");
-                // Kích hoạt datepicker cho input đó
-                $("#" + inputId).datepicker("show");
+            flatpickr(".datetime-picker", {
+                enableTime: true, // Cho phép chọn giờ
+                dateFormat: "d/m/Y H:i", // Định dạng ngày giờ
+                minDate: currentDate, // Đặt ngày thấp nhất là ngày hôm nay
+                time_24hr: true
             });
         });
     </script>
     <script>
+        $(document).ready(function() {
+            $("#pickup-date, #return-date").datetimepicker({
+                dateFormat: "dd/mm/yy", // Định dạng ngày
+                timeFormat: "HH:mm",
+            });
+        });
+
         function calculateAndRedirect(id) {
             var pickupDateTimeStr = $("#pickup-date").val();
             var returnDateTimeStr = $("#return-date").val();
 
-            // Chuyển đổi chuỗi ngày và giờ thành đối tượng Date
-            var pickupDateTime = $.datepicker.parseDateTime("dd/mm/yy", "HH:mm", pickupDateTimeStr);
-            var returnDateTime = $.datepicker.parseDateTime("dd/mm/yy", "HH:mm", returnDateTimeStr);
+            try {
+                // Tách ngày và giờ
+                var pickupDateStr = pickupDateTimeStr.split(" ")[0]; // Phần ngày
+                var pickupTimeStr = pickupDateTimeStr.split(" ")[1]; // Phần giờ
+                var returnDateStr = returnDateTimeStr.split(" ")[0]; // Phần ngày
+                var returnTimeStr = returnDateTimeStr.split(" ")[1]; // Phần giờ
 
-            // Tính số ngày
-            if (pickupDateTime && returnDateTime) {
-                var timeDiff = returnDateTime - pickupDateTime; // Tính chênh lệch thời gian
-                var daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24)); // Số ngày chênh lệch
+                // Chuyển đổi thành Date với múi giờ cục bộ
+                var pickupDateParts = pickupDateStr.split("/"); // dd/mm/yyyy
+                var pickupDateTime = new Date(
+                    pickupDateParts[2], // Năm
+                    pickupDateParts[1] - 1, // Tháng (bắt đầu từ 0)
+                    pickupDateParts[0], // Ngày
+                    pickupTimeStr.split(":")[0], // Giờ
+                    pickupTimeStr.split(":")[1] // Phút
+                );
 
-                // Kiểm tra giờ trả có trễ hơn giờ nhận không, nếu có thì cộng thêm một ngày
-                if (returnDateTime.getHours() > pickupDateTime.getHours() ||
-                    (returnDateTime.getHours() === pickupDateTime.getHours() && returnDateTime.getMinutes() > pickupDateTime.getMinutes())) {
-                    daysDiff += 1;
+                var returnDateParts = returnDateStr.split("/");
+                var returnDateTime = new Date(
+                    returnDateParts[2],
+                    returnDateParts[1] - 1,
+                    returnDateParts[0],
+                    returnTimeStr.split(":")[0],
+                    returnTimeStr.split(":")[1]
+                );
+
+                // Tính số ngày chênh lệch
+                if (pickupDateTime && returnDateTime) {
+                    var timeDiff = returnDateTime - pickupDateTime; // Tính chênh lệch thời gian
+                    var daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24)); // Số ngày chênh lệch
+
+                    // Nếu giờ trả trễ hơn giờ nhận, cộng thêm 1 ngày
+                    if (
+                        returnDateTime.getHours() > pickupDateTime.getHours() ||
+                        (returnDateTime.getHours() === pickupDateTime.getHours() &&
+                            returnDateTime.getMinutes() >= pickupDateTime.getMinutes())
+                    ) {
+                        daysDiff += 1;
+                    }
+
+                    // Truyền giá trị qua URL
+                    var formattedPickupDateTime = `${pickupDateParts[2]}-${pickupDateParts[1]}-${pickupDateParts[0]}T${pickupTimeStr}:00`;
+                    var formattedReturnDateTime = `${returnDateParts[2]}-${returnDateParts[1]}-${returnDateParts[0]}T${returnTimeStr}:00`;
+
+                    window.location.href = `Order_Form.php?day=${daysDiff}&id=${id}&pickdate=${encodeURIComponent(formattedPickupDateTime)}&returndate=${encodeURIComponent(formattedReturnDateTime)}`;
+                } else {
+                    alert("Vui lòng chọn cả ngày và giờ nhận và trả.");
                 }
-
-                // Truyền giá trị 'daysDiff' và 'id' qua URL và chuyển hướng đến trang Order_Form.php
-                window.location.href = `Order_Form.php?day=${daysDiff}&id=${id}`;
-            } else {
-                alert("Vui lòng chọn cả ngày và giờ nhận và trả.");
+            } catch (error) {
+                alert("Định dạng ngày/giờ không hợp lệ. Vui lòng nhập đúng định dạng (dd/mm/yyyy HH:mm).");
             }
         }
     </script>
+
 </head>
 
 <body>
@@ -250,7 +278,7 @@ if (isset($_GET['id'])) {
                         <h2>GIAO XE</h2>
                         <hr>
                         <label>
-                            <input type="checkbox"> Giao xe tại đại lý
+                            Giao xe tại đại lý
                         </label>
                     </div>
                     <div class="rental_card">
@@ -260,14 +288,14 @@ if (isset($_GET['id'])) {
                             <div>
                                 <label for="pickup-date">Ngày nhận xe</label>
                                 <div class="input-container">
-                                    <input type="text" id="pickup-date">
+                                    <input type="text" id="pickup-date" class="datetime-picker">
                                     <i class="fas fa-calendar-alt"></i>
                                 </div>
                             </div>
                             <div>
                                 <label for="return-date">Ngày trả xe</label>
                                 <div class="input-container">
-                                    <input type="text" id="return-date">
+                                    <input type="text" id="return-date" class="datetime-picker">
                                     <i class="fas fa-calendar-alt"></i>
                                 </div>
                             </div>
@@ -277,19 +305,22 @@ if (isset($_GET['id'])) {
                     <div class="rental_card">
                         <h2>THỦ TỤC CẦN CÓ</h2>
                         <hr>
-                        <p>CCCD</p>
-                        <p>Bằng lái xe</p>
+                        <label>Căn cước công dân</label>
+                        <br>
+                        <label>Giấy phép lái xe</label>
+
                     </div>
 
                     <div class="rental_card">
                         <h2>GIỚI HẠN QUÃNG ĐƯỜNG</h2>
                         <hr>
-                        <p>2000 Km (Nếu vượt qua phụ thu 5000 VND/Km)</p>
+                        <label>2000 Km (Nếu vượt qua phụ thu 5000 VND/Km)</label>
                     </div>
                     <div class="rental_card">
                         <h2>GIỚI HẠN THỜI GIAN</h2>
                         <hr>
-                        <p>Ghi trên hợp đồng (Nếu vượt qua phụ thu 5000 VND/h)</p>
+
+                        <label>Ghi trên hợp đồng (Nếu vượt qua phụ thu 5000 VND/h)</label>
                     </div>
                     <div class="rental_card ">
                         <div class="order_card">

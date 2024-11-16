@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 12, 2024 lúc 03:36 PM
+-- Thời gian đã tạo: Th10 16, 2024 lúc 04:06 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.0.30
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -39,13 +39,6 @@ CREATE TABLE `anh_xe` (
 --
 
 INSERT INTO `anh_xe` (`id`, `xe_id`, `url_anh`, `la_anh_dai_dien`) VALUES
-(56, 9, 'z5937438217304_9f63074ed6df93b85efdcd71eeecefd2.jpg', 0),
-(57, 9, 'z5937438217319_41ac35c7571c0dc154d0de5308b4d657.jpg', 0),
-(58, 9, 'z5937438217320_23c37e1bf7500f76ab346c37c0477255.jpg', 0),
-(59, 9, 'z5937438217321_b878b1b43b5c3ef164d79e7d5b286864.jpg', 0),
-(60, 9, 'z5937438217325_444e14f0292a451cd4f6d99c01f10759.jpg', 0),
-(61, 9, 'z5937438267764_d17e111108ab7f101705b30abab7c16f.jpg', 0),
-(62, 9, 'z5937438295418_e6d68f887e5f424f51726182ca8f55d1.jpg', 0),
 (63, 10, 'z5937422483456_c6978d15b26c12d20d1f6a045fdef301.jpg', 0),
 (64, 10, 'z5937422483471_7e6826ee1ba8c16b284b230d18684c19.jpg', 0),
 (65, 10, 'z5937422483496_c395f852f44fed1b98a3e7aa9750569f.jpg', 0),
@@ -221,6 +214,31 @@ INSERT INTO `dong_xe` (`id`, `ten_dong_xe`, `hang_xe_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `don_hang`
+--
+
+CREATE TABLE `don_hang` (
+  `KH_CCCD` varchar(20) NOT NULL,
+  `XE_ID` int(11) NOT NULL,
+  `DH_MADON` int(11) NOT NULL,
+  `DH_NGAYLAP` date DEFAULT NULL,
+  `DH_SONGAYTHUE` int(11) DEFAULT NULL,
+  `DH_NGAYBD` datetime DEFAULT NULL,
+  `DH_NGAYKT` datetime DEFAULT NULL,
+  `DH_TONGTIEN` int(11) DEFAULT NULL,
+  `DH_TIENCOC` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `don_hang`
+--
+
+INSERT INTO `don_hang` (`KH_CCCD`, `XE_ID`, `DH_MADON`, `DH_NGAYLAP`, `DH_SONGAYTHUE`, `DH_NGAYBD`, `DH_NGAYKT`, `DH_TONGTIEN`, `DH_TIENCOC`) VALUES
+('079123456789', 12, 1, '2024-11-16', 2, '2024-11-20 21:28:00', '2024-11-21 21:28:00', 2000000, 600000);
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `hang_xe`
 --
 
@@ -264,29 +282,28 @@ INSERT INTO `hang_xe` (`id`, `ten_hang_xe`) VALUES
 -- --------------------------------------------------------
 
 --
-<<<<<<< HEAD
--- Cấu trúc bảng cho bảng `orders`
+-- Cấu trúc bảng cho bảng `khach`
 --
 
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `car_id` int(11) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `note` text DEFAULT NULL,
-  `payment_method` varchar(50) DEFAULT NULL,
-  `discount_code` varchar(50) DEFAULT NULL,
-  `total_price` decimal(10,2) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+CREATE TABLE `khach` (
+  `KH_CCCD` varchar(20) NOT NULL,
+  `KH_HOTEN` varchar(50) NOT NULL,
+  `KH_GPLX` varchar(20) NOT NULL,
+  `KH_DIACHI` varchar(300) NOT NULL,
+  `KH_SDT` varchar(20) NOT NULL,
+  `KH_EMAIL` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `khach`
+--
+
+INSERT INTO `khach` (`KH_CCCD`, `KH_HOTEN`, `KH_GPLX`, `KH_DIACHI`, `KH_SDT`, `KH_EMAIL`) VALUES
+('079123456789', 'Huỳnh Thanh Phong', '76543212345', 'Số 123 Đường 30 Tháng 4, Phường Xuân Khánh, Quận Ninh Kiều, TP. Cần Thơ', '0772115794', 'phong@gmail.com');
 
 -- --------------------------------------------------------
 
 --
-=======
->>>>>>> 7566c73cc12aca39b52ef08650bfd5172aa090d5
 -- Cấu trúc bảng cho bảng `roles`
 --
 
@@ -303,6 +320,26 @@ INSERT INTO `roles` (`id`, `role_name`) VALUES
 (1, 'admin'),
 (2, 'nhan_vien'),
 (3, 'khach_hang');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `trang_thai`
+--
+
+CREATE TABLE `trang_thai` (
+  `XE_ID` int(11) NOT NULL,
+  `TT_NGAYBD` datetime NOT NULL,
+  `TT_NGAYKT` datetime NOT NULL,
+  `TT_TRANGTHAI` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `trang_thai`
+--
+
+INSERT INTO `trang_thai` (`XE_ID`, `TT_NGAYBD`, `TT_NGAYKT`, `TT_TRANGTHAI`) VALUES
+(12, '2024-11-20 21:28:00', '2024-11-21 21:28:00', 'Đang thuê');
 
 -- --------------------------------------------------------
 
@@ -328,12 +365,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `email`, `ho_ten`, `so_dien_thoai`, `ngay_sinh`, `dia_chi`, `password`, `role_id`) VALUES
 (2, 'admin@gmail.com', '', '', '0000-00-00', '', '$2y$10$rD0fIvKGB9MwWxZ5sZ.dWeuIi5EUULSH3n6dYx5XkxjIFhE5PKE0u', 1),
 (4, 'nguyen@gmail.com', 'Đoàn Chí Nguyễn', '0835886837', '2003-07-31', '', '$2y$10$Kxu/U5RKA9femC59Y9sOkOfm4HkQ43MR0/ryIJuD6x8oz7HpLdKuG', 3),
-<<<<<<< HEAD
-(5, 'phong@gmail.com', 'Huỳnh Thanh Phong', '0772115794', '2003-03-09', 'Sóc Trăng', '$2y$10$8XhL.z3umal2qMd50gpAT.kl2ZX9A4o9xjMd/jsUL.rZ6CSx3HGH.', 3),
-(6, 'giang@ctu.edu.vn', 'Tran Truong Giang', '0334880259', '2003-02-02', 'Soc Trang', '$2y$10$hAk.wasttckwor8vh6gwNesCpBQSSEWl3N3Z.Nng0tPFnLYhwvt5i', 3);
-=======
 (5, 'phong@gmail.com', 'Huỳnh Thanh Phong', '0772115794', '2003-03-09', 'Sóc Trăng', '$2y$10$8XhL.z3umal2qMd50gpAT.kl2ZX9A4o9xjMd/jsUL.rZ6CSx3HGH.', 3);
->>>>>>> 7566c73cc12aca39b52ef08650bfd5172aa090d5
 
 -- --------------------------------------------------------
 
@@ -356,19 +388,19 @@ CREATE TABLE `xe` (
   `ngay_dang` datetime DEFAULT current_timestamp(),
   `hang_xe_id` int(11) NOT NULL,
   `dong_xe_id` int(11) NOT NULL,
-  `thue_xe` tinyint(1) DEFAULT 0
+  `thue_xe` tinyint(1) DEFAULT 0,
+  `bien_so` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `xe`
 --
 
-INSERT INTO `xe` (`id`, `phien_ban`, `nam_san_xuat`, `kieu_dang`, `xuat_xu`, `so_ghe_ngoi`, `odo`, `nhien_lieu`, `hop_so`, `gia`, `mo_ta`, `ngay_dang`, `hang_xe_id`, `dong_xe_id`, `thue_xe`) VALUES
-(9, '2.2 4WD', '2022', 'SUV', 'Trong nước', 7, 34000, 'Dầu', 'Số tự động', 1199000000.00, '🚗 𝐇𝐲𝐮𝐧𝐝𝐚𝐢 𝐒𝐚𝐧𝐭𝐚𝐟𝐞 𝟐.𝟐𝐃 𝟒𝐱𝟒 𝟐𝟎𝟐𝟐 𝐝𝐚̂̀𝐮 𝐜𝐚𝐨 𝐜𝐚̂́𝐩 𝐅𝐮𝐥𝐥 𝐎𝐩𝐭𝐢𝐨𝐧𝐬 🚗\r\n🌟 Xe gia đình, 7 chỗ, gầm cao, tiện nghi, hiện đại\r\n🌟 Động cơ dầu 2.2L - Hộp số tự động 8 cấp, dẫn động 2 cầu thông minh\r\n🔹 Màu Đen/nội thất nâu\r\n🔹 Sản xuất 2022\r\n🔹 ODO: 3.5v\r\n\r\n✨️ Trang bị Options: Đèn Full Led, mâm 19 inch, 4 chế độ lái, hàng ghế phía trước chỉnh điện 2 vị trí nhớ tích hợp sưởi ghế, sưởi vô lăng, Màn hình giải trí 10.25 inch hổ trợ kết nối điện thoại thông minh, bảng đồ dẫn đường, Hệ thống âm thanh 10 loa Harman-Cardon cao cấp, Sạc không dây, cửa số trời toàn cảnh Panorama, 6 túi khí, Camera 360, khởi động từ xa,...\r\n\r\n✨️Trang bị thêm: Film cách nhiệt, thảm lót sàn,…\r\n', '2024-10-18 22:53:42', 3, 15, 0),
-(10, 'V', '2019', 'MPV', 'Trong nước', 7, 82000, 'Xăng', 'Số tự động', 668000000.00, '🚗 TOYOTA INNOVA 2.0V 2019 Cao cấp full options 🚗\r\n🌟 Xe gia đình, 7 chỗ, gầm cao, tiện nghi\r\n🌟 Động cơ xăng 2.0L - Hộp số tự động 6 cấp\r\n🔹 Xe màu Đồng - Nội thất nâu\r\n🔹 Sản xuất 2019\r\n🔹 Pháp lý công ty, XHĐ\r\n🔹 ODO: 8v2 km, Full lịch sử hãng\r\n\r\n✨️ Trang bị Options: Đèn Led, gương chỉnh điện, ghế lái chỉnh điện, mâm 17inch, 6 loa giải trí, 7 túi khí, Camera lùi, Cảm biến lùi ,màn hình giải trí DVD 7inch Bluetooth , 2 chế độ lái (ECO và POWER), Vô-lăng 3 chấu bọc da ốp gỗ cao cấp tích hợp nhiều phím chức năng và rất nhiều Options khác...\r\n\r\n✨️ Trang bị thêm: Film cách nhiệt, thảm lót sàn,…', '2024-10-18 22:57:26', 1, 5, 0),
-(11, 'Allure', '2021', 'Crossover', 'Trong nước', 5, 59000, 'Xăng', 'Số tự động', 755000000.00, '🚗 𝐏𝐞𝐮𝐠𝐞𝐨𝐭 𝟑𝟎𝟎𝟖 𝐀𝐥𝐥𝐮𝐫𝐞 𝟏.𝟔𝐀𝐓 𝐓𝐮𝐫𝐛𝐨 𝟐𝟎𝟐𝟏 𝐇𝐨̂̀𝐧𝐠 𝐜𝐚́ 𝐭𝐢́𝐧𝐡 🚗\r\n🌟 Xe gia đình, 5 chỗ, gầm cao, thể thao , cá tính\r\n🌟 Động cơ xăng 1.6L Turbo - Hộp số tự động 6 cấp\r\n🔹 Xe màu Hồng/nội thất Đen\r\n🔹 Sản xuất 2021\r\n🔹 ODO: 59 ngàn\r\n\r\n✨️ Trang bị Options: Hệ thống đèn Full Led, ghế chỉnh điện bọc da cao cấp, màn hình giải trí 8 inch kết nối Apple Carplay và Android Auto, mâm 18 inch, cửa sổ trời toàn cảnh Panorama, cảm biến trước, sau và camera lùi, hệ thống âm thanh 6 loa, đèn viền Led nội thất, 6 túi khí, 5 chế độ lái,…\r\n\r\n✨️Trang bị thêm: Film cách nhiệt, thảm lót sàn,…', '2024-10-18 23:04:26', 15, 79, 0),
-(12, '1.5L Luxury', '2024', 'Sedan', 'Nhật Bản', 5, 68000, 'Xăng', 'Số tự động', 1000000.00, 'Mazda 3 2019, tên cá nhân, biển số Hà Nội, đỏ pha lê\r\n- Trang bị: Ghế điện, phanh tay điện tử, cửa sổ trời, Start/Stop, điều hòa tự động, túi khí quanh xe, màn LCD/camera lùi/cảm biến lùi/6 loa, ABS, EBD.. Cùng nhiều tiện ích an toàn giải trí khác..\r\n- Cam kết: Khung gầm, động cơ, hộp số nguyên bản. Xe không tai nạn, không ngập nước, không phạt nguội\r\n- Test Hãng hoặc Gara bất kỳ theo yêu cầu người mua\r\n- Thiện chí trực tiếp có thương lượng\r\n- Cảm ơn đã xem tin!', '2024-11-01 00:00:17', 5, 25, 1),
-(13, 'MT', '2017', 'Sedan', '', 5, 2000, 'Xăng', 'Số sàn', 600000.00, 'Toyota Vios là một mẫu sedan cỡ nhỏ rất phổ biến tại các thị trường châu Á, đặc biệt là ở Việt Nam, nơi nó được đánh giá cao nhờ tính kinh tế, bền bỉ và dễ dàng bảo dưỡng. Mẫu xe này của Toyota ra đời lần đầu vào năm 2002 và đã trải qua nhiều phiên bản cải tiến, hiện tại thuộc thế hệ thứ tư.', '2024-11-07 16:23:45', 1, 4, 1);
+INSERT INTO `xe` (`id`, `phien_ban`, `nam_san_xuat`, `kieu_dang`, `xuat_xu`, `so_ghe_ngoi`, `odo`, `nhien_lieu`, `hop_so`, `gia`, `mo_ta`, `ngay_dang`, `hang_xe_id`, `dong_xe_id`, `thue_xe`, `bien_so`) VALUES
+(10, 'V', '2019', 'MPV', 'Trong nước', 7, 82000, 'Xăng', 'Số tự động', 668000000.00, '🚗 TOYOTA INNOVA 2.0V 2019 Cao cấp full options 🚗\r\n🌟 Xe gia đình, 7 chỗ, gầm cao, tiện nghi\r\n🌟 Động cơ xăng 2.0L - Hộp số tự động 6 cấp\r\n🔹 Xe màu Đồng - Nội thất nâu\r\n🔹 Sản xuất 2019\r\n🔹 Pháp lý công ty, XHĐ\r\n🔹 ODO: 8v2 km, Full lịch sử hãng\r\n\r\n✨️ Trang bị Options: Đèn Led, gương chỉnh điện, ghế lái chỉnh điện, mâm 17inch, 6 loa giải trí, 7 túi khí, Camera lùi, Cảm biến lùi ,màn hình giải trí DVD 7inch Bluetooth , 2 chế độ lái (ECO và POWER), Vô-lăng 3 chấu bọc da ốp gỗ cao cấp tích hợp nhiều phím chức năng và rất nhiều Options khác...\r\n\r\n✨️ Trang bị thêm: Film cách nhiệt, thảm lót sàn,…', '2024-10-18 22:57:26', 1, 5, 0, '29A-123.45'),
+(11, 'Allure', '2021', 'Crossover', 'Trong nước', 5, 59000, 'Xăng', 'Số tự động', 755000000.00, '🚗 𝐏𝐞𝐮𝐠𝐞𝐨𝐭 𝟑𝟎𝟎𝟖 𝐀𝐥𝐥𝐮𝐫𝐞 𝟏.𝟔𝐀𝐓 𝐓𝐮𝐫𝐛𝐨 𝟐𝟎𝟐𝟏 𝐇𝐨̂̀𝐧𝐠 𝐜𝐚́ 𝐭𝐢́𝐧𝐡 🚗\r\n🌟 Xe gia đình, 5 chỗ, gầm cao, thể thao , cá tính\r\n🌟 Động cơ xăng 1.6L Turbo - Hộp số tự động 6 cấp\r\n🔹 Xe màu Hồng/nội thất Đen\r\n🔹 Sản xuất 2021\r\n🔹 ODO: 59 ngàn\r\n\r\n✨️ Trang bị Options: Hệ thống đèn Full Led, ghế chỉnh điện bọc da cao cấp, màn hình giải trí 8 inch kết nối Apple Carplay và Android Auto, mâm 18 inch, cửa sổ trời toàn cảnh Panorama, cảm biến trước, sau và camera lùi, hệ thống âm thanh 6 loa, đèn viền Led nội thất, 6 túi khí, 5 chế độ lái,…\r\n\r\n✨️Trang bị thêm: Film cách nhiệt, thảm lót sàn,…', '2024-10-18 23:04:26', 15, 79, 0, '30G-678.90\n'),
+(12, '1.5L Luxury', '2024', 'Sedan', 'Nhật Bản', 5, 68000, 'Xăng', 'Số tự động', 1000000.00, 'Mazda 3 2019, tên cá nhân, biển số Hà Nội, đỏ pha lê\r\n- Trang bị: Ghế điện, phanh tay điện tử, cửa sổ trời, Start/Stop, điều hòa tự động, túi khí quanh xe, màn LCD/camera lùi/cảm biến lùi/6 loa, ABS, EBD.. Cùng nhiều tiện ích an toàn giải trí khác..\r\n- Cam kết: Khung gầm, động cơ, hộp số nguyên bản. Xe không tai nạn, không ngập nước, không phạt nguội\r\n- Test Hãng hoặc Gara bất kỳ theo yêu cầu người mua\r\n- Thiện chí trực tiếp có thương lượng\r\n- Cảm ơn đã xem tin!', '2024-11-01 00:00:17', 5, 25, 1, '51H-456.78\n'),
+(13, 'MT', '2017', 'Sedan', '', 5, 2000, 'Xăng', 'Số sàn', 600000.00, 'Toyota Vios là một mẫu sedan cỡ nhỏ rất phổ biến tại các thị trường châu Á, đặc biệt là ở Việt Nam, nơi nó được đánh giá cao nhờ tính kinh tế, bền bỉ và dễ dàng bảo dưỡng. Mẫu xe này của Toyota ra đời lần đầu vào năm 2002 và đã trải qua nhiều phiên bản cải tiến, hiện tại thuộc thế hệ thứ tư.', '2024-11-07 16:23:45', 1, 4, 1, '65F-234.56\n');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -389,25 +421,35 @@ ALTER TABLE `dong_xe`
   ADD KEY `hang_xe_id` (`hang_xe_id`);
 
 --
+-- Chỉ mục cho bảng `don_hang`
+--
+ALTER TABLE `don_hang`
+  ADD PRIMARY KEY (`KH_CCCD`,`XE_ID`,`DH_MADON`),
+  ADD KEY `FK_RELATIONSHIP_11` (`XE_ID`);
+
+--
 -- Chỉ mục cho bảng `hang_xe`
 --
 ALTER TABLE `hang_xe`
   ADD PRIMARY KEY (`id`);
 
 --
-<<<<<<< HEAD
--- Chỉ mục cho bảng `orders`
+-- Chỉ mục cho bảng `khach`
 --
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `khach`
+  ADD PRIMARY KEY (`KH_CCCD`);
 
 --
-=======
->>>>>>> 7566c73cc12aca39b52ef08650bfd5172aa090d5
 -- Chỉ mục cho bảng `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `trang_thai`
+--
+ALTER TABLE `trang_thai`
+  ADD PRIMARY KEY (`XE_ID`,`TT_NGAYBD`,`TT_NGAYKT`);
 
 --
 -- Chỉ mục cho bảng `users`
@@ -447,15 +489,6 @@ ALTER TABLE `hang_xe`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
-<<<<<<< HEAD
--- AUTO_INCREMENT cho bảng `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
-=======
->>>>>>> 7566c73cc12aca39b52ef08650bfd5172aa090d5
 -- AUTO_INCREMENT cho bảng `roles`
 --
 ALTER TABLE `roles`
@@ -465,11 +498,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-<<<<<<< HEAD
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-=======
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
->>>>>>> 7566c73cc12aca39b52ef08650bfd5172aa090d5
 
 --
 -- AUTO_INCREMENT cho bảng `xe`
@@ -492,6 +521,19 @@ ALTER TABLE `anh_xe`
 --
 ALTER TABLE `dong_xe`
   ADD CONSTRAINT `dong_xe_ibfk_1` FOREIGN KEY (`hang_xe_id`) REFERENCES `hang_xe` (`id`) ON DELETE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `don_hang`
+--
+ALTER TABLE `don_hang`
+  ADD CONSTRAINT `FK_RELATIONSHIP_10` FOREIGN KEY (`KH_CCCD`) REFERENCES `khach` (`KH_CCCD`),
+  ADD CONSTRAINT `FK_RELATIONSHIP_11` FOREIGN KEY (`XE_ID`) REFERENCES `xe` (`id`);
+
+--
+-- Các ràng buộc cho bảng `trang_thai`
+--
+ALTER TABLE `trang_thai`
+  ADD CONSTRAINT `FK_RELATIONSHIP_1` FOREIGN KEY (`XE_ID`) REFERENCES `xe` (`id`);
 
 --
 -- Các ràng buộc cho bảng `users`
