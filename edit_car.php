@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "UPDATE xe SET 
     hang_xe_id = ?, dong_xe_id = ?, phien_ban = ?, nam_san_xuat = ?,
     kieu_dang = ?, xuat_xu = ?, so_ghe_ngoi = ?, odo = ?,
-    nhien_lieu = ?, hop_so = ?, gia = ?, mo_ta = ?
+    nhien_lieu = ?, hop_so = ?, gia = ?, mo_ta = ?,thue_xe = ?
     WHERE id = ?";
 
     $stmt = $conn->prepare($sql);
@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $hop_so,
         $gia,
         $mo_ta,
+        $thuexe,
         $id
     );
 
@@ -242,6 +243,14 @@ $hang_xe_list = $conn->query("SELECT * FROM hang_xe");
                         <label for="gia" class="form-label">Giá:</label>
                         <input type="number" name="gia" id="gia" class="form-control" value="<?= $car['gia'] ?>"
                             required>
+                    </div>
+                    <div class="mb-3">
+                    <label for="Kinh_Doanh" class="form-label required">Loại hình kinh doanh</label>
+                                    <select class="form-select" id="thue_xe" name="thue_xe" required>
+                                        <option value="">Chọn loại hình kinh doanh</option>
+                                        <option value="0">Bán</option>
+                                        <option value="1">Thuê</option>
+                                    </select>
                     </div>
                     <div class="mb-3">
                         <label for="mo_ta" class="form-label">Mô tả:</label>

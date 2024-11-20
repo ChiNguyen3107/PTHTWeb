@@ -35,8 +35,10 @@ if (isset($_SESSION['success'])) {
     </title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-date-picker/3.2.8/tiny-date-picker.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-time-picker/2.3.4/tiny-time-picker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tiny-date-picker/3.2.8/tiny-date-picker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/tiny-time-picker/2.3.4/tiny-time-picker.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-date-picker/3.2.8/tiny-date-picker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-time-picker/2.3.4/tiny-time-picker.min.js"></script>
@@ -98,7 +100,9 @@ if (isset($_SESSION['success'])) {
                 <div class="account-dropdown">
                     <button class="account-btn">
                         <i class="fas fa-user"></i>
-                        <span><?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?></span>
+                        <span>
+                            <?php echo $is_logged_in ? $user_name : 'Tài khoản'; ?>
+                        </span>
                     </button>
                     <div class="dropdown-content">
                         <?php if (isset($_SESSION['user_id'])): ?>
@@ -124,7 +128,7 @@ if (isset($_SESSION['success'])) {
     </div>
 
     <script>
-        $(function() {
+        $(function () {
             // Khởi tạo Flatpickr cho Date Picker
             flatpickr("#pickup-date", {
                 dateFormat: "d/m/Y",
@@ -152,23 +156,25 @@ if (isset($_SESSION['success'])) {
             });
         });
     </script>
+  
+   
     <div class="Searching">
         <form class="form_searching" action="" method="GET">
             <div class="section">
                 <div class="label">Ngày nhận xe</div>
-                <input type="text" id="pickup-date" name="pickup_date" class="input-field" value="">
+                <input type="text" id="pickup-date" name="pickup_date" class="input-field" value=".">
             </div>
             <div class="section">
                 <div class="label">Giờ nhận xe</div>
-                <input type="text" id="pickup-time" name="pickup_time" class="input-field" value="" require>
+                <input type="text" id="pickup-time" name="pickup_time" class="input-field" value="." require>
             </div>
             <div class="section">
                 <div class="label">Ngày trả xe</div>
-                <input type="text" id="return-date" name="return_date" class="input-field" value="">
+                <input type="text" id="return-date" name="return_date" class="input-field" value=".">
             </div>
             <div class="section">
                 <div class="label">Giờ trả xe</div>
-                <input type="text" id="return-time" name="return_time" class="input-field" value="" require>
+                <input type="text" id="return-time" name="return_time" class="input-field" value="." require>
             </div>
             <div class="button-container">
                 <button type="submit" class="button">TÌM XE</button>
@@ -311,21 +317,25 @@ if (isset($_SESSION['success'])) {
                     $pickupTime = $_GET['pickup_time'];
                     $returnDate = $_GET['return_date'];
                     $returnTime = $_GET['return_time'];
+                    if ($pickupDate != "." && $pickupTime != "." && $returnDate != "." && $returnTime != ".") {
+                        $pickupDateTime = DateTime::createFromFormat('d/m/Y H:i', "$pickupDate $pickupTime")->format('Y-m-d H:i:s');
+                        $returnDateTime = DateTime::createFromFormat('d/m/Y H:i', "$returnDate $returnTime")->format('Y-m-d H:i:s');
+                    }
 
-                    $pickupDateTime = DateTime::createFromFormat('d/m/Y H:i', "$pickupDate $pickupTime")->format('Y-m-d H:i:s');
-                    $returnDateTime = DateTime::createFromFormat('d/m/Y H:i', "$returnDate $returnTime")->format('Y-m-d H:i:s');
-                } else {
-                    $pickupDateTime = date("Y-m-d H:i:s"); // Thời gian hiện tại
-                    $returnDateTime = date("Y-m-d H:i:s", strtotime('+1 day')); // Thời gian mặc định là ngày hôm sau
                 }
-
+                else{
+                    $pickupDate = ".";
+                    $pickupTime =".";
+                    $returnDate = ".";
+                    $returnTime =".";
+                }
                 // Truy vấn để lấy thông tin xe, hãng xe, dòng xe và ảnh
                 $sql_trangthai = "select * from trang_thai";
                 $stml_tt = $conn->prepare($sql_trangthai);
                 $stml_tt->execute();
                 $result_tt = $stml_tt->get_result();
                 if ($result_tt->num_rows > 0) {
-                    if ($pickupDateTime != null && $returnDateTime != null) {
+                    if ($pickupDate != "." && $pickupTime != "." && $returnDate != "." && $returnTime != ".") {
                         $sql = "SELECT xe.*, 
                                             hang_xe.ten_hang_xe AS hang_xe, 
                                             dong_xe.ten_dong_xe AS dong_xe, 
@@ -347,31 +357,31 @@ if (isset($_SESSION['success'])) {
                                         LIMIT 10;
                                         ";
                     } else {
-                        $currentDateTime = new DateTime();
+                        $currentDateTime = new DateTime(); // Tạo đối tượng DateTime với thời gian hiện tại
+                        $currentDateTimeFormatted = $currentDateTime->format('Y-m-d H:i:s'); // Chuyển đối tượng DateTime thành chuỗi với định dạng 'Y-m-d H:i:s'
+                
+                        // Câu SQL
+                
+                        $sql = "  SELECT xe.*, 
+                                   hang_xe.ten_hang_xe AS hang_xe, 
+                                   dong_xe.ten_dong_xe AS dong_xe, 
+                                   GROUP_CONCAT(anh_xe.url_anh) AS all_images
+                            FROM xe
+                            LEFT JOIN anh_xe ON xe.id = anh_xe.xe_id
+                            LEFT JOIN hang_xe ON xe.hang_xe_id = hang_xe.id
+                            LEFT JOIN dong_xe ON xe.dong_xe_id = dong_xe.id
+                            LEFT JOIN trang_thai ON xe.id = trang_thai.XE_ID
+                            WHERE xe.thue_xe = 1
+                            AND (
+                                trang_thai.XE_ID IS NULL  -- Trường hợp xe không có trạng thái
+                                OR (
+                                    trang_thai.TT_NGAYBD <= NOW()-- Ngày bắt đầu trạng thái không sau ngày hiện tại
+                                )
+                            )
+                            GROUP BY xe.id
+                            LIMIT 10";
+                        ;
 
-                        // Biến 2: Ngày giờ của biến 1 cộng thêm 3 tháng
-                        $dateTimePlus3Months = clone $currentDateTime;
-                        $dateTimePlus3Months->modify('+3 months');
-                        $sql = "SELECT xe.*, 
-                                            hang_xe.ten_hang_xe AS hang_xe, 
-                                            dong_xe.ten_dong_xe AS dong_xe, 
-                                            GROUP_CONCAT(anh_xe.url_anh) AS all_images
-                                        FROM xe
-                                        LEFT JOIN anh_xe ON xe.id = anh_xe.xe_id
-                                        LEFT JOIN hang_xe ON xe.hang_xe_id = hang_xe.id
-                                        LEFT JOIN dong_xe ON xe.dong_xe_id = dong_xe.id
-                                        LEFT JOIN trang_thai ON xe.id = trang_thai.XE_ID
-                                        WHERE xe.thue_xe = 1
-                                        AND (
-                                            trang_thai.XE_ID IS NULL -- Trường hợp xe không có trạng thái
-                                            OR (
-                                                '$currentDateTime' NOT BETWEEN trang_thai.TT_NGAYBD AND trang_thai.TT_NGAYKT
-                                                AND '$dateTimePlus3Months' NOT BETWEEN trang_thai.TT_NGAYBD AND trang_thai.TT_NGAYKT
-                                            )
-                                        )
-                                        GROUP BY xe.id
-                                        LIMIT 10;
-                                        ";
                     }
                 } else {
                     $sql = "SELECT xe.*, hang_xe.ten_hang_xe as hang_xe, dong_xe.ten_dong_xe as dong_xe, GROUP_CONCAT(anh_xe.url_anh) as all_images
@@ -390,7 +400,7 @@ if (isset($_SESSION['success'])) {
                 $stmt = $conn->prepare($sql);
                 if ($stmt) {
                     // Ràng buộc các tham số với các giá trị ngày và giờ
-
+                
                     // Thực thi truy vấn
                     $stmt->execute();
                     $result = $stmt->get_result();
@@ -398,7 +408,7 @@ if (isset($_SESSION['success'])) {
                     if ($result && $result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             $images = explode(',', $row["all_images"]); // Chuyển các ảnh thành mảng
-
+                
                             echo '<div class="listing">';
                             echo '<div class="image-container">';
 
