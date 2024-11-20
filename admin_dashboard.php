@@ -30,7 +30,7 @@ function countUsers($conn)
 }
 
 $totalCars = countCars($conn);
-$totalOrders = countStaff($conn);
+$totalStaff = countStaff($conn);
 $totalUsers = countUsers($conn);
 
 ?>
@@ -91,9 +91,9 @@ $totalUsers = countUsers($conn);
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="manage_orders.php">
-                                <i class="fas fa-shopping-cart me-2"></i>
-                                Quản lý đơn hàng
+                            <a class="nav-link" href="manage_staff.php">
+                                <i class="fas fa-user-tie me-2"></i>
+                                Quản lý nhân viên
                             </a>
                         </li>
                         <li class="nav-item">
@@ -137,8 +137,8 @@ $totalUsers = countUsers($conn);
                     <div class="col-md-4 mb-4">
                         <div class="card text-white bg-success">
                             <div class="card-body">
-                                <h5 class="card-title">Số lượng đơn hàng</h5>
-                                <p class="card-text display-4"><?= $totalOrders ?></p>
+                                <h5 class="card-title">Số lượng nhân viên</h5>
+                                <p class="card-text display-4"><?= $totalStaff ?></p>
                             </div>
                         </div>
                     </div>
