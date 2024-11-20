@@ -1,0 +1,305 @@
+
+.main-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.thumbnails img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.thumbnails img:hover {
+    opacity: 0.7;
+}
+
+.car-info {
+    flex: 1;
+    min-width: 300px;
+}
+
+.car-info h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.car-info h2 {
+    color: #ff7f00;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+
+.car-info table td:first-child {
+    font-weight: bold;
+    color: #666;
+    width: 40%;
+}
+
+
+/* Đặt car-container và car-description nằm ngang */
+
+.car-description p {
+    line-height: 1.6;
+    color: #666;
+}
+
+/* Nút gọi và nhắn tin */
+.button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #ff7f00;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #e67300;
+}
+
+/* Biểu tượng cho các thông tin xe */
+.car-info table td:first-child::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px;
+    color: #ff7f00;
+}
+
+.car-info table tr:nth-child(1) td:first-child::before {
+    content: "\f1b9";
+    /* Biểu tượng xe */
+}
+
+.car-info table tr:nth-child(2) td:first-child::before {
+    content: "\f52f";
+    /* Biểu tượng động cơ */
+}
+
+.car-info table tr:nth-child(3) td:first-child::before {
+    content: "\f018";
+    /* Biểu tượng nhiên liệu */
+}
+
+.car-info table tr:nth-child(4) td:first-child::before {
+    content: "\f0c0";
+    /* Biểu tượng số ghế */
+}
+
+.car-info table tr:nth-child(5) td:first-child::before {
+    content: "\f013";
+    /* Biểu tượng năm sản xuất */
+}
+
+.car-info table tr:nth-child(6) td:first-child::before {
+    content: "\f3c5";
+    /* Biểu tượng kiểu dáng */
+}
+
+/* Hiệu ứng hover cho các phần tử */
+.car-details table tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.3s ease;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .car-detail {
+        flex-direction: column;
+    }
+
+    .car-container,
+    .car-description {
+        flex-direction: column;
+        /* Đặt dọc trên thiết bị di động */
+    }
+}
+
+/* Thêm animation cho các phần tử khi trang tải */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.car-detail,
+.car-container,
+.car-description {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.car-gallery {
+    margin-bottom: 10px;
+}
+
+.main-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.thumbnail-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 70px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: opacity 0.3s;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}
+
+.car-info-card {
+    height: 100%;
+}
+
+.car-info-card h2{
+    text-align: left;
+
+}
+
+
+.price {
+    color: #ff7f00;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.contact-buttons .btn {
+    margin-right: 10px;
+}
+
+.specs-table td {
+    padding: 12px 8px;
+}
+
+.description-card {
+    margin-top: 30px;
+}
+
+.car-info-card {
+    width: 100;
+    border-radius: 10px;
+}
+
+.servic_info {
+    margin-left: 10px;
+    height: 100%;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    gap:10px;
+    border: 0;
+}
+
+.rental_card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.rental_card h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    text-align: left;
+}
+
+.rental_card p {
+    font-size: 14px;
+    font-style: italic ;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    text-align: left;
+}
+.rental_card hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 10px 0;
+}
+
+.date-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.date-container div {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-container label {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.date-container .input-container {
+    position: relative;
+    width: 160px;
+}
+
+.date-container input {
+    font-size: 16px;
+    padding: 8px 30px 8px 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.date-container i {
+    position: absolute;
+    right: 10px;
+    top: 35%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    cursor: pointer;
+}
+.order_card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.card_des{
+    height: 100%;
+}
