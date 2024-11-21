@@ -162,11 +162,17 @@ if (isset($_SESSION['success'])) {
         <form class="form_searching" action="" method="GET">
             <div class="section">
                 <div class="label">Ngày nhận xe</div>
-                <input type="text" id="pickup-date" name="pickup_date" class="input-field" value=".">
+                <input type="text" id="pickup-date" name="pickup_date" class="input-field" value="<?php
+// Lấy ngày và giờ hiện tại
+echo date("d/m/Y"); // Kết quả: 2024-11-21 14:30:45 (ví dụ)
+?>">
             </div>
             <div class="section">
                 <div class="label">Giờ nhận xe</div>
-                <input type="text" id="pickup-time" name="pickup_time" class="input-field" value="." require>
+                <input type="text" id="pickup-time" name="pickup_time" class="input-field" value="<?php
+// Lấy ngày và giờ hiện tại
+echo date("H:i"); // Kết quả: 2024-11-21 14:30:45 (ví dụ)
+?>" require>
             </div>
             <div class="section">
                 <div class="label">Ngày trả xe</div>
@@ -174,7 +180,10 @@ if (isset($_SESSION['success'])) {
             </div>
             <div class="section">
                 <div class="label">Giờ trả xe</div>
-                <input type="text" id="return-time" name="return_time" class="input-field" value="." require>
+                <input type="text" id="return-time" name="return_time" class="input-field" value="<?php
+// Lấy ngày và giờ hiện tại
+echo date("H:i"); // Kết quả: 2024-11-21 14:30:45 (ví dụ)
+?>" require>
             </div>
             <div class="button-container">
                 <button type="submit" class="button">TÌM XE</button>
@@ -335,7 +344,7 @@ if (isset($_SESSION['success'])) {
                 $stml_tt->execute();
                 $result_tt = $stml_tt->get_result();
                 if ($result_tt->num_rows > 0) {
-                    if ($pickupDate != "." && $pickupTime != "." && $returnDate != "." && $returnTime != ".") {
+                    if (  $returnDate != ".") {
                         $sql = "SELECT xe.*, 
                                             hang_xe.ten_hang_xe AS hang_xe, 
                                             dong_xe.ten_dong_xe AS dong_xe, 
@@ -357,11 +366,7 @@ if (isset($_SESSION['success'])) {
                                         LIMIT 10;
                                         ";
                     } else {
-                        $currentDateTime = new DateTime(); // Tạo đối tượng DateTime với thời gian hiện tại
-                        $currentDateTimeFormatted = $currentDateTime->format('Y-m-d H:i:s'); // Chuyển đối tượng DateTime thành chuỗi với định dạng 'Y-m-d H:i:s'
-                
-                        // Câu SQL
-                
+
                         $sql = "  SELECT xe.*, 
                                    hang_xe.ten_hang_xe AS hang_xe, 
                                    dong_xe.ten_dong_xe AS dong_xe, 
@@ -375,7 +380,7 @@ if (isset($_SESSION['success'])) {
                             AND (
                                 trang_thai.XE_ID IS NULL  -- Trường hợp xe không có trạng thái
                                 OR (
-                                    trang_thai.TT_NGAYBD <= NOW()-- Ngày bắt đầu trạng thái không sau ngày hiện tại
+                                    trang_thai.TT_NGAYKT < NOW() and trang_thai.TT_NGAYBD< NOW()-- Ngày bắt đầu trạng thái không sau ngày hiện tại
                                 )
                             )
                             GROUP BY xe.id
